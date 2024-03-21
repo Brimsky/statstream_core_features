@@ -16,5 +16,5 @@
 </template>
     
 <script setup>
-import Start from '../Components/Home/Start.vue'; 
+import Start from './Home/Start.vue'; 
 </script>

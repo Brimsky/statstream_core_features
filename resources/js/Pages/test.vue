@@ -10,8 +10,7 @@
 
             <div v-else>
                 <Link
-                    :href="route('login')"
-                    class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
+                    :href="route('login')" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
                     >Log in</Link>
 
                 <Link
@@ -25,7 +24,7 @@
 </template>
 
 <script setup>
-import Home from './Home.vue';
+import Home from '../Components/Home.vue';
 </script>
 
 <style>
