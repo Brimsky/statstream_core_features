@@ -25,7 +25,7 @@
           <InputError class="mt-2" :message="form.errors.password_confirmation" />
         </div>
         <div class=" mb-4 flex items-center justify-center">
-          <h4 class="text-black dark:text-gray-200">Already have an account? <router-link to="/login" class="transition duration-100 ease-in-out hover:text-blue-400 dark:hover:text-green-400">Click here!</router-link></h4>
+          <h4 class="text-black dark:text-gray-200">Already have an account? <a href="/login" class="transition duration-100 ease-in-out hover:text-blue-400 dark:hover:text-green-400">Click here!</a></h4>
         </div>
         <div class="flex items-center justify-between">
           <button type="submit" class="form-button" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">

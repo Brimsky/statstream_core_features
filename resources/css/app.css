@@ -5,7 +5,9 @@
 @tailwind components;
 @tailwind utilities;
 
-
+body {
+  @apply bg-white dark:bg-neutral-900
+}
 
 @layer components {
   /* registration */
@@ -23,11 +25,11 @@
 
   /* Navbar */
   .navbar-btn{
-  @apply dark:bg-stone-50 dark:text-black dark:font-extrabold dark:text-lg text-lg text-white font-bold py-1.5 px-4 rounded-xl justify-center dark:hover:bg-stone-400 dark:hover:shadow-lg bg-stone-900 hover:shadow-lg transition w-40 text-center;
+  @apply dark:bg-stone-50 dark:text-black dark:font-bold font-bold dark:text-lg text-lg text-white py-1.5 px-4 rounded-xl justify-center dark:hover:bg-stone-400 dark:hover:shadow-lg bg-stone-900 hover:shadow-lg transition w-40 text-center;
   }
 }
 
-@layer base{
+/* @layer base{
   :root{
     --color-bkg: 248, 250, 252;
     --color-contents: 30, 41, 59;
@@ -42,4 +44,4 @@
       --color-accent2: 153, 153, 153;
     }
   }
-}
+} */

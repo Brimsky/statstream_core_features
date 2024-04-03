@@ -1,5 +1,5 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
+import { Link } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import { useDark, useToggle} from '@vueuse/core';
   
@@ -8,7 +8,9 @@ import darkIcon from '../icons/Logo/darkicon.png';
   
 import lightmode from '../icons/Mode/sun.png'
 import darkmode from '../icons/Mode/moon.png'
-  
+
+import Start from '../Components/Home/About.vue';
+import Footer from '../Components/Footers/Footer.vue';
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
 console.log(isDark.value);
@@ -37,24 +39,50 @@ defineProps({
 
 </script>
 
-<template>
-<div class="dark:text-white dark:bg-neutral-800 flex justify-between items-center h-[70px] m-0 px-[15px] py-0">
-    <div class="flex items-center justify-center mx-12 w-11/12">
-      <div class="container flex items-center">
-        <img class="scale-50" :src="iconSrc" alt="Icon" />
-        <div  class="dark:text-white text-black text-lg font-bold">StatStream</div>
-      </div>
-      <div :href="('/')" v-if="canLogin" class="hidden md:flex space-x-10">
-        <Link  class="navbar-btn delay-30">Home</Link>
-        <div class="hidden md:flex space-x-10">
-            <Link :href="route('login')" class="navbar-btn delay-30">Login</Link>
-            <Link v-if="canRegister" :href="route('register')" class="navbar-btn delay-30">Sign up</Link>
+<template class="antialiased bg-neutral-900">
+<!-- Navbar -->
+<div class="text-white  dark:bg-neutral-800 flex h-[60px] m-0 px-[35px] py-0">
+    <div class="flex items-center justify-center mx-auto w-11/12">
+      <div class="container flex items-center ">
+        <a href="/">
+          <img class="scale-50" :src="iconSrc" alt="Icon" />
+        </a>
+        <a  href="/" class="dark:text-white text-black text-3xl tracking-wider font-bold">STATSTREAM</a>
         </div>
-        <Link v-if="$page.props.auth.user" :href="route('dashboard')">Dashboard</Link>
-        <button  class="dark:bg-stone-50 dark:text-black text-white font-bold py-1.5 px-4 rounded-xl justify-center dark:hover:bg-stone-400 dark:hover:shadow-lg  bg-stone-900 hover:shadow-lg transition delay-30" @click="toggleDark()"><img class="object-scale-down h-7 w-10" :src="mode" alt="Icon" /></button>
+      <div v-if="canLogin" class="flex items-center space-x-6">
+        <template v-if="$page.props.auth.user">
+          <Link :href="route('dashboard')"
+                class="navbar-btn">
+            Dashboard
+          </Link>
+          <button @click="toggleDark()"
+                  class="py-2 px-4 bg-stone-900 hover:bg-stone-700 dark:hover:bg-stone-400 dark:bg-white  text-white font-bold rounded-xl shadow-md transition duration-150">
+            <img class="h-7" :src="mode" alt="Dark Mode Icon" />
+          </button>
+        </template>
+        <template v-else>
+          <Link :href="route('login')"
+                class="navbar-btn">
+            Log in
+          </Link>
+          <Link v-if="canRegister" :href="route('register')"
+                class="navbar-btn">
+            Register
+          </Link>
+          <button @click="toggleDark()"
+                  class="py-2 px-4 bg-stone-900 hover:bg-stone-700 dark:hover:bg-stone-400 dark:bg-white  text-white font-bold rounded-xl shadow-md transition duration-150">
+            <img class="h-7" :src="mode" alt="Dark Mode Icon" />
+          </button>
+        </template>
       </div>
     </div>
 </div>
-</template>
+<!-- Home page -->
+<Start />
 
+
+<!-- Footer -->
+<Footer />
+
+</template>
 
