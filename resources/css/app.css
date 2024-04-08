@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 @tailwind base;
-@tailwind components;
 @tailwind utilities;
 
 body {
@@ -20,7 +19,7 @@ body {
   }
 
   .form-button {
-    @apply w-full text-white bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:ring-blue-200 dark:bg-violet-600 dark:hover:bg-violet-800;
+    @apply w-full text-white bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded focus:outline-none focus:ring  dark:bg-violet-600 dark:hover:bg-violet-800;
   }
 
   /* Navbar */
