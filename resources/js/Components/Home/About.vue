@@ -50,7 +50,7 @@
       </div>
   
       <div class="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-        <a class="block rounded-xl border border-white dark:border-gray-800 p-8 shadow-xl transition hover:border-purple-600 hover:shadow-purple-600/50"
+        <a class="block rounded-xl border border-white dark:border-gray-800 p-8 shadow-xl transition hover:border-blue-600 hover:shadow-blue-600/50 dark:hover:border-purple-600 dark:hover:shadow-purple-600/50"
           href="#">
           
           <span class="text-4xl flex justify-center items-center">🌲</span>
@@ -62,7 +62,7 @@
           </p>
         </a>
         <a
-          class="block rounded-xl border border-white dark:border-gray-800 p-8 shadow-xl transition hover:border-purple-600 hover:shadow-purple-600/50"
+          class="block rounded-xl border border-white dark:border-gray-800 p-8 shadow-xl transition hover:border-blue-600 hover:shadow-blue-600/50 dark:hover:border-purple-600 dark:hover:shadow-purple-600/50"
           href="#"
         >
           <span class="text-4xl flex justify-center items-center">🔍</span>
@@ -75,7 +75,7 @@
         </a>
   
         <a
-          class="block rounded-xl border border-white dark:border-gray-800 p-8 shadow-xl transition hover:border-purple-600 hover:shadow-purple-600/50"
+          class="block rounded-xl border border-white dark:border-gray-800 p-8 shadow-xl transition hover:border-blue-600 hover:shadow-blue-600/50 dark:hover:border-purple-600 dark:hover:shadow-purple-600/50"
           href="#"
         >
           <span class="text-4xl flex justify-center items-center">📊</span>
@@ -88,7 +88,7 @@
         </a>
   
         <a
-          class="block rounded-xl border border-white dark:border-gray-800 p-8 shadow-xl transition hover:border-purple-600 hover:shadow-purple-600/50"
+          class="block rounded-xl border border-white dark:border-gray-800 p-8 shadow-xl transition hover:border-blue-600 hover:shadow-blue-600/50 dark:hover:border-purple-600 dark:hover:shadow-purple-600/50"
           href="#"
         >
           <span class="text-4xl flex justify-center items-center">🤝</span>
@@ -101,7 +101,7 @@
         </a>
   
         <a
-          class="block rounded-xl border border-white dark:border-gray-800 p-8 shadow-xl transition hover:border-purple-600 hover:shadow-purple-600/50"
+          class="block rounded-xl border border-white dark:border-gray-800 p-8 shadow-xl transition hover:border-blue-600 hover:shadow-blue-600/50 dark:hover:border-purple-600 dark:hover:shadow-purple-600/50"
           href="#"
         >
         <span class="text-4xl flex justify-center items-center">🛠</span>
