@@ -30,11 +30,16 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-// routes for timber speacies 
+// Web Routes for Dashboard and Category Pages
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
+
     Route::get('/timber-category', [TimberSpeciesController::class, 'index'])->name('timber-category.index');
-    Route::get('/timber-chart/{id}', [TimberSpeciesController::class, 'show'])->name('timber-chart.show');
+    Route::get('/timber-chart/{species}', [TimberSpeciesController::class, 'show'])->name('timber-chart.show');
 });
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

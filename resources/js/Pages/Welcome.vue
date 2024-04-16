@@ -13,7 +13,7 @@ import Start from '../Components/Home/About.vue';
 import Footer from '../Components/Footers/Footer.vue';
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
-console.log(isDark.value);
+// console.log(isDark.value);
   
 const mode = computed(() => isDark.value ? darkmode : lightmode);
 const iconSrc = computed(() => isDark.value ? darkIcon : lightIcon);

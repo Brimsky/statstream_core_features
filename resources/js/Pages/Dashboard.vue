@@ -1,9 +1,27 @@
-<script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
-</script>
-
 <template>
     <AuthenticatedLayout>
+      <component :is="currentComponent" :key="$page.component" />
     </AuthenticatedLayout>
-</template>
+  </template>
+  
+  <script setup>
+  import { computed } from 'vue';
+  import { usePage } from '@inertiajs/inertia-vue3';
+  import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+  import TimberCategory from './TimberCategory.vue';
+  import TimberChart from './TimberChart.vue';
+  
+  const page = usePage();
+  
+  const currentComponent = computed(() => {
+    switch (page.component) {
+      case 'TimberCategory':
+        return TimberCategory;
+      case 'TimberChart':
+        return TimberChart;
+      default:
+        return null; // Optionally handle a default case
+    }
+  });
+  </script>
+  

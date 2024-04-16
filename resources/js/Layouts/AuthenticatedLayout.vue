@@ -29,19 +29,11 @@ import logoIcon from '../icons/Logo/icon.png';
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink :href="route('dashboard')" :active="route().current('dashboard')"> Dashboard </NavLink>
+                                <NavLink :href="route('dashboard')" class="text-sm font-medium text-gray-500 hover:text-gray-700 p-1">Dashboard</NavLink>
+                                <NavLink :href="route('timber-category.index')" class="text-sm font-medium text-gray-500 hover:text-gray-700 p-1">Timber</NavLink>
+                                <NavLink :href="route('dashboard')" class="text-sm font-medium text-gray-500 hover:text-gray-700 p-1">Charts</NavLink>
+                                <NavLink :href="route('dashboard')" class="text-sm font-medium text-gray-500 hover:text-gray-700 p-1">News</NavLink>
                             </div>
-                            <!-- <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink :href="route('timber-category')" :active="route().current('dashboard')"> timber </NavLink>
-                            </div> -->
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink :href="route('timber-category')" :active="route().current('haha')"> Charts </NavLink>
-                            </div>
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink :href="route('dashboard')" :active="route().current('dashssboard')"> News </NavLink>
-                            </div>
-
-
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ms-6">

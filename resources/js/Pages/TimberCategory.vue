@@ -1,26 +1,19 @@
 <template>
   <div>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="specie in species" :key="specie.id">
-          <td>{{ specie.name }}</td>
-          <td><InertiaLink :href="route('timber-chart.show', { id: specie.id })">View Details</InertiaLink></td>
-        </tr>
-      </tbody>
-    </table>
+    <h1>Available Species</h1>
+    <ul>
+      <li v-for="item in species" :key="item.speacies">
+        <InertiaLink :href="route('timber-chart.show', item.speacies)">{{ item.speacies }}</InertiaLink>
+      </li>
+    </ul>
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    species: Array
-  }
-}
+<script setup>
+import { defineProps } from 'vue';
+import { InertiaLink } from '@inertiajs/inertia-vue3';
+
+const props = defineProps({
+  species: Array
+});
 </script>

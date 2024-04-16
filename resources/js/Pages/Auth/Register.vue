@@ -1,5 +1,9 @@
 <template>
     <div class="flex justify-center items-center min-h-screen bg-gradient-to-r from-gray-200 to-gray-300 dark:from-neutral-700 dark:to-neutral-800">
+      <a href="#" class="flex mb-6 p-6 text-2xl font-semibold text-gray-900 dark:text-white">
+        <img class="scale-50" :src="iconSrc" alt="Icon" />
+        STATSTREAM    
+      </a>
       <div class="p-6 bg-white dark:bg-neutral-700 rounded-lg shadow">
         <!-- <img class="scale-50" :src="imgSrc" alt="Icon" /> -->
         <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
@@ -13,6 +17,7 @@
   
               <input
                 type="text" v-model="form.name"
+                placeholder="Bob"
                 id="FirstName"
                 name="first_name"
                 class="mt-1 w-full rounded-md border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-600 text-sm text-gray-700 dark:text-white shadow-sm"
@@ -26,6 +31,7 @@
   
               <input
                 type="text"
+                placeholder="Marley"
                 id="LastName"
                 name="last_name"
                 class="mt-1 w-full rounded-md border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-600 text-sm text-gray-700 dark:text-white shadow-sm"
@@ -38,6 +44,7 @@
               <input
                 type="email" v-model="form.email"
                 id="Email"
+                placeholder="youremail.@mail.com"
                 name="email"
                 class="mt-1 w-full rounded-md border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-600 text-sm text-gray-700 dark:text-white shadow-sm"
               />
@@ -49,6 +56,7 @@
               <input
                 type="password" v-model="form.password"
                 id="Password"
+                placeholder="••••••••"
                 name="password"
                 class="mt-1 w-full rounded-md border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-600 text-sm text-gray-700 dark:text-white shadow-sm"
               />
