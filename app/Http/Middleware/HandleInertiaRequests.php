@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use App\Models\User;
+use App\Models\TimberSpecies;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -16,8 +18,11 @@ class HandleInertiaRequests extends Middleware
 
     /**
      * Determine the current asset version.
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @return string|null
      */
-    public function version(Request $request): string|null
+    public function version(Request $request): ?string
     {
         return parent::version($request);
     }
@@ -25,15 +30,28 @@ class HandleInertiaRequests extends Middleware
     /**
      * Define the props that are shared by default.
      *
+     * @param \Illuminate\Http\Request $request
      * @return array<string, mixed>
      */
     public function share(Request $request): array
     {
-        return [
-            ...parent::share($request),
+        return array_merge(parent::share($request), [
             'auth' => [
                 'user' => $request->user(),
             ],
-        ];
+            'timber_species' => TimberSpecies::all()->map(function ($species) {
+                return [
+                    'id' => $species->id,
+                    'speacies' => $species->speacies,
+                    'class' => $species->class,
+                    'diameter'== $species->diameter,
+                    'length'== $species->length,
+                    'seller'== $species->seller,
+                    'location'== $species->location,
+                    'price'== $species->price,
+                    'date'== $species->date,
+                ];
+            }),
+        ]);
     }
 }

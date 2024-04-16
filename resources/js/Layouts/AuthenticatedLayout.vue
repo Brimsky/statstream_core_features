@@ -31,11 +31,14 @@ import logoIcon from '../icons/Logo/icon.png';
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')"> Dashboard </NavLink>
                             </div>
+                            <!-- <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <NavLink :href="route('timber-category')" :active="route().current('dashboard')"> timber </NavLink>
+                            </div> -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink :href="route('dashboard')" :active="route().current('dashboard')"> Charts </NavLink>
+                                <NavLink :href="route('timber-category')" :active="route().current('haha')"> Charts </NavLink>
                             </div>
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink :href="route('dashboard')" :active="route().current('dashboard')"> News </NavLink>
+                                <NavLink :href="route('dashboard')" :active="route().current('dashssboard')"> News </NavLink>
                             </div>
 
 

@@ -5,6 +5,5 @@ import { Head } from '@inertiajs/vue3';
 
 <template>
     <AuthenticatedLayout>
-        
     </AuthenticatedLayout>
 </template>
