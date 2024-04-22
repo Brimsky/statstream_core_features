@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
-
-use App\Models\TimberSpecies;
+namespace App\Http\Controllers\Timber;
+use App\Http\Controllers\Controller;
+use App\Models\Timber\TimberSpecies;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Inertia\Response;
+
 
 class TimberSpeciesController extends Controller
 {

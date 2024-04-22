@@ -1,6 +1,6 @@
 <template>
     <AuthenticatedLayout>
-      <component :is="currentComponent" :key="$page.component" />
+      
     </AuthenticatedLayout>
   </template>
   

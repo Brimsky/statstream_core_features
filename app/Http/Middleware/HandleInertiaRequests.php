@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use App\Models\User;
-use App\Models\TimberSpecies;
+use App\Models\Timber\TimberSpecies;
 
 class HandleInertiaRequests extends Middleware
 {

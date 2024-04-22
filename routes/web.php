@@ -1,7 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\TimberSpeciesController;
+use App\Http\Controllers\Timber\TimberSpeciesController;
+use App\Http\Controllers\News\NewsController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -26,9 +27,9 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return Inertia::render('Dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 // Web Routes for Dashboard and Category Pages
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -36,6 +37,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
+    Route::get('',[NewsController::class,'news'])->name('');
+
+    //Timber stuff
     Route::get('/timber-category', [TimberSpeciesController::class, 'index'])->name('timber-category.index');
     Route::get('/timber-chart/{species}', [TimberSpeciesController::class, 'show'])->name('timber-chart.show');
 });
