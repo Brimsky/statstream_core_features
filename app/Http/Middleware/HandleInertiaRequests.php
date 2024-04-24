@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Inertia\Middleware;
 use App\Models\User;
 use App\Models\Timber\TimberSpecies;
+// use App\Models\News\News;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -52,6 +53,19 @@ class HandleInertiaRequests extends Middleware
                     'date'== $species->date,
                 ];
             }),
+            // 'news' => News::all()->map(function ($news) {
+            //     return [
+            //         'id' => $species->id,
+            //         'speacies' => $species->speacies,
+            //         'class' => $species->class,
+            //         'diameter'== $species->diameter,
+            //         'length'== $species->length,
+            //         'seller'== $species->seller,
+            //         'location'== $species->location,
+            //         'price'== $species->price,
+            //         'date'== $species->date,
+            //     ];
+            // }),
         ]);
     }
 }
