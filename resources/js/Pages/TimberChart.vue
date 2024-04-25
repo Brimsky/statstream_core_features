@@ -1,9 +1,10 @@
-<template>
+<!-- <template>
   <AuthenticatedLayout>
     <div class="flex flex-col items-center justify-center mx-auto">
-      <h1 class="text-5xl font-bold py-10">{{ species }}</h1>
+      <h1 class="text-5xl font-bold p-5">{{ species }}</h1>
+      <div class="p-4">
       <div>
-        <div ref="chartContainer" style="width: 1000px; height: 600px;"></div>
+        <div ref="chartContainer" style="width: 1000px; height: 800px;"></div>
       </div>
       <div class="space-y-4">
         <input v-model="filterSeller" placeholder="Filter by Seller">
@@ -12,15 +13,72 @@
         <input v-model.number="filterLength" placeholder="Filter by Length (m)">
         <input v-model="filterLocation" placeholder="Filter by Location">
       </div>
-      <ul>
+      <!-- <ul>
         <li v-for="entry in filteredEntries" :key="entry.id">
           Class: {{ entry.class }}, Diameter: {{ entry.diameter }} cm, Length: {{ entry.length }} m, Seller: {{ entry.seller }}, Location: {{ entry.location }}, Price: {{ entry.price }}, Date: {{ entry.date }}
         </li>
+      </ul> 
+    </div>
+      </div>
+  </AuthenticatedLayout>
+</template> -->
+
+<template>
+  <AuthenticatedLayout>
+    <div class="container mx-auto px-6 py-6 bg-gray-200 rounded-lg">
+
+      <!-- Flex container for the main content -->
+      <div class="flex flex-row gap-8 items-start">
+
+        <div class="flex-grow bg-white border-4 border-blue-500 rounded-lg shadow-md overflow-hidden">
+          <div ref="chartContainer" class="w-full h-96 y-96"></div> 
+        </div>
+
+        <div class="flex flex-col w-96 bg-white p-6 rounded-lg shadow-md">
+          <div class="text-5xl font-bold text-gray-800 mb-5">{{ species }}</div>
+
+          <div class="space-y-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="filterSeller">Filter by Seller</label>
+            <select v-model="filterSeller" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+              <option value="">All Sellers</option>
+              <option v-for="seller in uniqueSellers" :key="seller" :value="seller">{{ seller }}</option>
+            </select>
+            
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="filterClass">Filter by Class</label>
+            <select v-model="filterClass" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+              <option value="">All Classes</option>
+              <option v-for="classs in uniqueclass" :key="classs" :value="classs">{{ classs }}</option>
+            </select>
+
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="filterDiameter">Filter by Diameter</label>
+            <select v-model="filterDiameter" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+              <option value="">All Diameters</option>
+              <option v-for="diameter in uniqueDiameter" :key="diameter" :value="diameter">{{ diameter }}</option>
+            </select>
+
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="filterLength">Filter by Length</label>
+            <select v-model="filterLength" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+              <option value="">All Lengths</option>
+              <option v-for="length in uniqueLength" :key="length" :value="length">{{ length }}</option>
+            </select>
+
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="filterLocation">Filter by Location</label>
+            <select v-model="filterLocation" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+              <option value="">All Locations</option>
+              <option v-for="location in uniqueLocation" :key="location" :value="location">{{ location }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <ul>
+        <!-- <li v-for="entry in filteredEntries" :key="entry.id">
+          Class: {{ entry.class }}, Diameter: {{ entry.diameter }} cm, Length: {{ entry.length }} m, Seller: {{ entry.seller }}, Location: {{ entry.location }}, Price: {{ entry.price }}, Date: {{ entry.date }}
+        </li> -->
       </ul>
     </div>
   </AuthenticatedLayout>
 </template>
-
+<!-- <div ref="chartContainer" class="h-96">  -->
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { defineProps, onMounted, ref, computed, watchEffect } from 'vue';
@@ -50,6 +108,29 @@ const filteredEntries = computed(() => {
   );
 });
 
+const uniqueSellers = computed(() => {
+  const sellers = new Set(entries.value.map(entry => entry.seller));
+  return Array.from(sellers);
+});
+const uniqueclass = computed(() => {
+  const classs = new Set(entries.value.map(entry => entry.class));
+  return Array.from(classs);
+});
+
+const uniqueDiameter = computed(() => {
+  const diameter = new Set(entries.value.map(entry => entry.diameter));
+  return Array.from(diameter);
+});
+
+const uniqueLength = computed(() => {
+  const length = new Set(entries.value.map(entry => entry.length));
+  return Array.from(length);
+});
+
+const uniqueLocation = computed(() => {
+  const location = new Set(entries.value.map(entry => entry.location));
+  return Array.from(location);
+});
 // Watch effect to update the chart whenever any filter changes
 watchEffect(() => {
   updateChart();
@@ -73,6 +154,12 @@ function updateChart() {
   const yAxisData = filteredEntries.value.map(entry => entry.price);
 
   chart.setOption({
+    tooltip: {
+    trigger: 'axis',
+    axisPointer: {
+      type: 'shadow'
+    }
+  },
     xAxis: {
       type: 'category',
       data: xAxisData
