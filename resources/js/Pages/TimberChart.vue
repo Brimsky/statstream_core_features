@@ -28,7 +28,7 @@
     <div class="container mx-auto px-6 py-6 bg-gray-200 rounded-lg">
 
       <!-- Flex container for the main content -->
-      <div class="flex flex-row gap-8 items-start">
+      <div class="flex flex-row gap-4 items-start">
 
         <div class="flex-grow bg-white border-4 border-blue-500 rounded-lg shadow-md overflow-hidden">
           <div ref="chartContainer" class="w-full h-96 y-96"></div> 
@@ -70,12 +70,12 @@
           </div>
         </div>
       </div>
-      <ul>
-        <!-- <li v-for="entry in filteredEntries" :key="entry.id">
-          Class: {{ entry.class }}, Diameter: {{ entry.diameter }} cm, Length: {{ entry.length }} m, Seller: {{ entry.seller }}, Location: {{ entry.location }}, Price: {{ entry.price }}, Date: {{ entry.date }}
-        </li> -->
-      </ul>
     </div>
+    <ul class="container mx-auto px-6 py-6 bg-gray-200 rounded-lg space-y-8">
+        <li v-for="entry in filteredEntries" :key="entry.id">
+           Seller: {{ entry.seller }}, Price: {{ entry.price }}
+        </li>
+    </ul>
   </AuthenticatedLayout>
 </template>
 <!-- <div ref="chartContainer" class="h-96">  -->
@@ -151,15 +151,28 @@ function updateChart() {
 
   // Use filtered data for the chart
   const xAxisData = filteredEntries.value.map(entry => entry.seller);
-  const yAxisData = filteredEntries.value.map(entry => entry.price);
+  const yAxisData = filteredEntries.value.map(entry => ({
+    price: entry.price,
+    class: entry.class, // Include class data
+    location: entry.location // Include location data
+  }));
 
   chart.setOption({
     tooltip: {
-    trigger: 'axis',
-    axisPointer: {
-      type: 'shadow'
-    }
-  },
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      },
+      formatter: function(params) {
+        const dataIndex = params[0].dataIndex;
+        const tooltipContent = [
+          'Price: ' + params[0].value,
+          'Class: ' + yAxisData[dataIndex].class,
+          'Location: ' + yAxisData[dataIndex].location
+        ];
+        return tooltipContent.join('<br>');
+      }
+    },
     xAxis: {
       type: 'category',
       data: xAxisData
@@ -170,8 +183,10 @@ function updateChart() {
     series: [{
       name: 'Price',
       type: 'bar',
-      data: yAxisData,
+      data: yAxisData.map(item => item.price),
     }]
   });
 }
+
+
 </script>
