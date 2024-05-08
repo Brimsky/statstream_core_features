@@ -11,17 +11,5 @@
   import TimberCategory from './TimberCategory.vue';
   import TimberChart from './TimberChart.vue';
   
-  const page = usePage();
-  
-  const currentComponent = computed(() => {
-    switch (page.component) {
-      case 'TimberCategory':
-        return TimberCategory;
-      case 'TimberChart':
-        return TimberChart;
-      default:
-        return null; // Optionally handle a default case
-    }
-  });
   </script>
   

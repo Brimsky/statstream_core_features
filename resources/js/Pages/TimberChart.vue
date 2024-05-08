@@ -1,27 +1,3 @@
-<!-- <template>
-  <AuthenticatedLayout>
-    <div class="flex flex-col items-center justify-center mx-auto">
-      <h1 class="text-5xl font-bold p-5">{{ species }}</h1>
-      <div class="p-4">
-      <div>
-        <div ref="chartContainer" style="width: 1000px; height: 800px;"></div>
-      </div>
-      <div class="space-y-4">
-        <input v-model="filterSeller" placeholder="Filter by Seller">
-        <input v-model.number="filterClass" placeholder="Filter by Class">
-        <input v-model.number="filterDiameter" placeholder="Filter by Diameter (cm)">
-        <input v-model.number="filterLength" placeholder="Filter by Length (m)">
-        <input v-model="filterLocation" placeholder="Filter by Location">
-      </div>
-      <!-- <ul>
-        <li v-for="entry in filteredEntries" :key="entry.id">
-          Class: {{ entry.class }}, Diameter: {{ entry.diameter }} cm, Length: {{ entry.length }} m, Seller: {{ entry.seller }}, Location: {{ entry.location }}, Price: {{ entry.price }}, Date: {{ entry.date }}
-        </li>
-      </ul> 
-    </div>
-      </div>
-  </AuthenticatedLayout>
-</template> -->
 
 <template>
   <AuthenticatedLayout>
@@ -31,10 +7,10 @@
       <div class="flex flex-row gap-4 items-start">
 
         <div class="flex-grow bg-white border-4 border-blue-500 rounded-lg shadow-md overflow-hidden">
-          <div ref="chartContainer" class="w-full h-96 y-96"></div> 
+          <div ref="chartContainer" class="h-96 y-96"></div> 
         </div>
 
-        <div class="flex flex-col w-96 bg-white p-6 rounded-lg shadow-md">
+        <div class="flex flex-col w-96 bg-white p-6 rounded-lg shadow-md h-full">
           <div class="text-5xl font-bold text-gray-800 mb-5">{{ species }}</div>
 
           <div class="space-y-4">
