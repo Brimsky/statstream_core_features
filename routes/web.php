@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Timber\TimberSpeciesController;
 // use App\Http\Controllers\News\NewsController;
+use App\Http\Middleware\EnsureUserIsVip;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -38,18 +39,28 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     // Route::get('',[NewsController::class,'news'])->name('');
+    Route::get('/vip-section', [EnsureUserIsVip::class, 'index'])->middleware('isVip');
 
     //Timber stuff
     Route::get('/timber-category', [TimberSpeciesController::class, 'index'])->name('timber-category.index');
     Route::get('/timber-chart/{species}', [TimberSpeciesController::class, 'show'])->name('timber-chart.show');
-
 });
+
+//VIP area in web page
+
+// Route::middleware(['auth', 'isVip'])->group(function () {
+//     Route::get('/vip-section', [SomeController::class, 'vipOnlyArea'])->name('vip-section');
+// });
 
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    // Ensure this line is correctly placed within the 'auth' middleware group
+    Route::post('/profile/become-vip', [ProfileController::class, 'becomeVip'])->name('profile.become-vip');
 });
+
 
 require __DIR__.'/auth.php';

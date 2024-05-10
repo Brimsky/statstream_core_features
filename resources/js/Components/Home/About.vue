@@ -2,6 +2,7 @@
   <section class="dark:bg-neutral-900 py-96  container mx-auto antialiased ">
       <div class="container mx-auto text-black">
         <h1 class="font-inter font-bold text-5xl md:text-6xl mb-4 text-wrap dark:text-white">CHANGE THE WAY YOU ANALIZE</h1>
+        <h1 class="font-inter font-bold text-5xl md:text-6xl mb-4 text-wrap bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block text-transparent bg-clip-text ">TIMBER</h1>
         <p class="font-inter mb-8 text-2xl w-1/2 dark:text-white">Transform your analysis with comprehensive timber price statistics, redefining how you perceive market trends.</p>
         <button class="dark:bg-neutral-700 bg-white dark:text-white text-gray-800 px-6 py-3 rounded-lg font-semibold dark:hover:bg-purple-500 hover:bg-blue-500 hover:text-white transition duration-300">Start Now</button>
       </div>

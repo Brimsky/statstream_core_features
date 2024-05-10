@@ -8,12 +8,16 @@ return new class extends Migration
 {
     public function up(): void
     {
-        //
+        Schema::create("news", function (Blueprint $table) {
+            $table->id("id");
+            $table->string("header");
+            $table->string("text");
+            $table->string("path");
+            $table->string("views");
+        });
     }
 
-    /**
-     * Reverse the migrations.
-     */
+    
     public function down(): void
     {
         Schema::dropIfExists('news');

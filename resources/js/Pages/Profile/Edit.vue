@@ -4,6 +4,8 @@ import DeleteUserForm from './Partials/DeleteUserForm.vue';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
 import { Head } from '@inertiajs/vue3';
+import { ref } from 'vue';
+import { Inertia } from '@inertiajs/inertia';
 
 defineProps({
     mustVerifyEmail: {
@@ -12,7 +14,12 @@ defineProps({
     status: {
         type: String,
     },
+    user: Object,
 });
+const assignVip = () => {
+    Inertia.post('/profile/assign-vip');
+};
+
 </script>
 
 <template>
@@ -21,6 +28,9 @@ defineProps({
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Profile</h2>
+            <button @click="assignVip" class="btn btn-primary">
+                Become VIP
+            </button>
         </template>
 
         <div class="py-12">

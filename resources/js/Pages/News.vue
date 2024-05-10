@@ -1,6 +1,7 @@
 <template>
     <AuthenticatedLayout>
         <H1>NEWS</H1>
+        
     </AuthenticatedLayout>
 </template>
 
