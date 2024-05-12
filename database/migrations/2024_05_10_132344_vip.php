@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('vip', function (Blueprint $table) {
+        Schema::create('vips', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->references('id')->on('users');
-            $table->foreignId('saved_materials_id');
+            $table->foreignId('saved_materials_id')->nullable()->change();
             $table->boolean('status')->default(false);
             $table->timestamps();
         });
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('vip');
+        Schema::dropIfExists('vips');
     }
 };

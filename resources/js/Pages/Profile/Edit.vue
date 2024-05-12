@@ -16,9 +16,11 @@ defineProps({
     },
     user: Object,
 });
-const assignVip = () => {
-    Inertia.post('/profile/assign-vip');
+const toggleVip = () => {
+    Inertia.post('/toggle-vip');
 };
+
+
 
 </script>
 
@@ -28,9 +30,9 @@ const assignVip = () => {
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Profile</h2>
-            <button @click="assignVip" class="btn btn-primary">
-                Become VIP
-            </button>
+            <div>
+                <button @click="toggleVip">Toggle VIP Status</button>
+            </div>
         </template>
 
         <div class="py-12">

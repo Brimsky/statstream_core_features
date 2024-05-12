@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\VipController;
 use App\Http\Controllers\Timber\TimberSpeciesController;
 // use App\Http\Controllers\News\NewsController;
 use App\Http\Middleware\EnsureUserIsVip;
@@ -59,7 +60,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
     // Ensure this line is correctly placed within the 'auth' middleware group
-    Route::post('/profile/become-vip', [ProfileController::class, 'becomeVip'])->name('profile.become-vip');
+    Route::middleware('auth')->group(function () {
+        Route::post('/toggle-vip', [VipController::class, 'toggleVipStatus'])->name('toggle-vip');
+    });
+    
 });
 
 
