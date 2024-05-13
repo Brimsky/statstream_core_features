@@ -4,9 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
-use App\Models\User;
 use App\Models\Timber\TimberSpecies;
-// use App\Models\News\News;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -38,35 +36,23 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         return array_merge(parent::share($request), [
-            'auth' => [
-                'user' => $request->user(),
-            ],
+            'auth.user' => function () use ($request) {
+                $user = $request->user();
+                return $user ? $user->only('name', 'email', 'vip_status') : null;
+            },
             'timber_species' => TimberSpecies::all()->map(function ($species) {
                 return [
                     'id' => $species->id,
-                    'speacies' => $species->speacies,
+                    'species' => $species->species,
                     'class' => $species->class,
-                    'diameter'== $species->diameter,
-                    'length'== $species->length,
-                    'seller'== $species->seller,
-                    'location'== $species->location,
-                    'price'== $species->price,
-                    'date'== $species->date,
+                    'diameter' => $species->diameter,
+                    'length' => $species->length,
+                    'seller' => $species->seller,
+                    'location' => $species->location,
+                    'price' => $species->price,
+                    'date' => $species->date,
                 ];
             }),
-            // 'news' => News::all()->map(function ($news) {
-            //     return [
-            //         'id' => $species->id,
-            //         'speacies' => $species->speacies,
-            //         'class' => $species->class,
-            //         'diameter'== $species->diameter,
-            //         'length'== $species->length,
-            //         'seller'== $species->seller,
-            //         'location'== $species->location,
-            //         'price'== $species->price,
-            //         'date'== $species->date,
-            //     ];
-            // }),
         ]);
     }
 }

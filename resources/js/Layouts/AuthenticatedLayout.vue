@@ -5,7 +5,10 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
+import { usePage } from '@inertiajs/vue3';
+import Footer from '../Components/Footers/Footer.vue';
 
+const { user } = usePage().props.auth;
 
 const showingNavigationDropdown = ref(false);
 
@@ -34,6 +37,7 @@ import logoIcon from '../icons/Logo/icon.png';
                                 <NavLink :href="route('timber-category.index')" class="text-sm font-medium text-gray-500 hover:text-gray-700 p-1">Timber</NavLink>
                                 <!-- <NavLink :href="route('dashboard')" class="text-sm font-medium text-gray-500 hover:text-gray-700 p-1">Market Place</NavLink>
                                 <NavLink :href="route('dashboard')" class="text-sm font-medium text-gray-500 hover:text-gray-700 p-1">News</NavLink> -->
+                                <NavLink v-if="user && user.vip_status" :href="route('saved-materials.index')" class="text-sm font-medium text-gray-500 hover:text-gray-700 p-1">Saved Materials</NavLink>
                             </div>
                         </div>
 
@@ -140,5 +144,6 @@ import logoIcon from '../icons/Logo/icon.png';
                 <slot />
             </main>
         </div>
+        <Footer />
     </div>
 </template>

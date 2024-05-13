@@ -9,8 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Timber\FollowedTimber,
     App\Models\Timber\TimberSpecies;
-use \App\Models\MyUserModel;
-
+use App\Models\Vip;
 
 class User extends Authenticatable
 {
@@ -54,8 +53,15 @@ class User extends Authenticatable
     }
 
     // In User.php
-    public function vipStatus()
+    protected $appends = ['vip_status'];
+
+    public function vip()
     {
         return $this->hasOne(Vip::class);
+    }
+
+    public function getVipStatusAttribute()
+    {
+        return optional($this->vip)->status ?? false;
     }
 }

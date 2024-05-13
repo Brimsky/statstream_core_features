@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('saved_materials', function (Blueprint $table) {
+        Schema::create('saved_timbers', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->unsignedBigInteger('liked_material')->nullable(); // Assuming this is optional
             $table->boolean('notify_status');
             $table->timestamps();

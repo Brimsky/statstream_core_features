@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VipController;
 use App\Http\Controllers\Timber\TimberSpeciesController;
+use App\Http\Controllers\Timber\SavedMaterialsController;
+
 // use App\Http\Controllers\News\NewsController;
 use App\Http\Middleware\EnsureUserIsVip;
 use Illuminate\Foundation\Application;
@@ -45,6 +47,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     //Timber stuff
     Route::get('/timber-category', [TimberSpeciesController::class, 'index'])->name('timber-category.index');
     Route::get('/timber-chart/{species}', [TimberSpeciesController::class, 'show'])->name('timber-chart.show');
+
+    // In your routes/web.php
+    Route::get('/saved-materials', [SavedMaterialsController::class, 'index'])
+     ->name('saved-materials.index')
+     ->middleware('vip'); // Using the alias defined in Kernel.php
 });
 
 //VIP area in web page
@@ -65,6 +72,7 @@ Route::middleware('auth')->group(function () {
     });
     
 });
+
 
 
 require __DIR__.'/auth.php';

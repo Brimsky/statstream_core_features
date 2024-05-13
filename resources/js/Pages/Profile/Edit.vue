@@ -6,6 +6,11 @@ import UpdateProfileInformationForm from './Partials/UpdateProfileInformationFor
 import { Head } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
+import { defineProps, computed } from 'vue';
+import { usePage } from '@inertiajs/vue3';
+
+const { user } = usePage().props.auth;
+
 
 defineProps({
     mustVerifyEmail: {
@@ -20,6 +25,7 @@ const toggleVip = () => {
     Inertia.post('/toggle-vip');
 };
 
+const vipStatus = computed(() => props.user?.vip_status);
 
 
 </script>
@@ -31,7 +37,9 @@ const toggleVip = () => {
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Profile</h2>
             <div>
-                <button @click="toggleVip">Toggle VIP Status</button>
+                <p v-if="user && user.vip_status">You are a VIP Member!</p>
+                <p v-else>You are not a VIP Member.</p>
+                <button v-if="!user.vip_status" @click="toggleVip">Become a VIP</button>
             </div>
         </template>
 

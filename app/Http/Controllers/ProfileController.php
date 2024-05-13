@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Log;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -65,6 +66,18 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
     
+    public function show(Request $request)
+    {
+        $user = $request->user();  // Or however you get your user object
+
+        // Log the VIP status
+        Log::info('VIP Status: ', ['status' => $user->vip_status]);
+
+        // Return the user data to your view or inertia response
+        return Inertia::render('Profile', [
+            'user' => $user
+        ]);
+    }
 
 
 }

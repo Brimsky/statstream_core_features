@@ -16,7 +16,6 @@
       </div>
     </div>
   </AuthenticatedLayout>
-  <Footer />
 </template>
 
 <script setup>
