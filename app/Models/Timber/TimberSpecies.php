@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class TimberSpecies extends Model
 {
-    // Assuming you have these fields in your 'timber_species' table
     protected $fillable = [
+        'id',
         'species',
         'class',
         'diameter',

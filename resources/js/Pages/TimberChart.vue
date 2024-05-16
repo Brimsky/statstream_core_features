@@ -48,10 +48,12 @@
       </div>
     </div>
     <ul class="container mx-auto px-6 py-6 bg-gray-200 rounded-lg space-y-8">
-        <li v-for="entry in filteredEntries" :key="entry.id">
-           Seller: {{ entry.seller }}, Price: {{ entry.price }}
-        </li>
+      <li v-for="entry in filteredEntries" :key="entry.id">
+        Seller: {{ entry.seller }}, Price: {{ entry.price }}
+        <button @click="saveMaterial(entry.id)" class="ml-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Save</button>
+      </li>
     </ul>
+
   </AuthenticatedLayout>
 </template>
 <!-- <div ref="chartContainer" class="h-96">  -->
@@ -107,6 +109,44 @@ const uniqueLocation = computed(() => {
   const location = new Set(entries.value.map(entry => entry.location));
   return Array.from(location);
 });
+
+
+
+const csrfToken = document.querySelector('meta[name="csrf-token"]') ? document.querySelector('meta[name="csrf-token"]').getAttribute('content') : null;
+
+if (!csrfToken) {
+  console.error('CSRF token not found');
+} else {
+  console.log('CSRF Token:', csrfToken); // You can remove this line once you confirm it's working
+}
+
+
+const saveMaterial = async (timberSpeciesId) => {
+  const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+  try {
+    const response = await fetch('/api/save-material', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': csrfToken, // Use the CSRF token
+      },
+      body: JSON.stringify({ liked_material: timberSpeciesId })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to save timber, status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log('Save successful:', data);
+  } catch (error) {
+    console.error('Error saving timber:', error);
+  }
+};
+
+
+
 // Watch effect to update the chart whenever any filter changes
 watchEffect(() => {
   updateChart();

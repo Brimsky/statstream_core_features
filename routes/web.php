@@ -47,11 +47,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     //Timber stuff
     Route::get('/timber-category', [TimberSpeciesController::class, 'index'])->name('timber-category.index');
     Route::get('/timber-chart/{species}', [TimberSpeciesController::class, 'show'])->name('timber-chart.show');
+// In routes/web.php
+    Route::post('/api/save-material', [SavedMaterialsController::class, 'store'])
+    ->middleware(['auth', 'web']);
+
 
     // In your routes/web.php
-    Route::get('/saved-materials', [SavedMaterialsController::class, 'index'])
+     Route::get('/saved-materials', [SavedMaterialsController::class, 'index'])
      ->name('saved-materials.index')
-     ->middleware('vip'); // Using the alias defined in Kernel.php
+     ->middleware('vip'); // Ensure this is accessible only by authenticated users
+
 });
 
 //VIP area in web page

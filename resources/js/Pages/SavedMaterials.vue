@@ -11,12 +11,13 @@ const savedMaterials = ref(props.savedMaterials || []); // Ensure it's always an
 
 <template>
     <AuthenticatedLayout>
-        <div>
-            <h1>Saved Materials</h1>
+        <div class="container mx-auto px-4 py-6">
+            <h1 class="text-xl font-bold">Saved Materials</h1>
             <div v-if="savedMaterials.length">
                 <ul>
-                    <li v-for="material in savedMaterials" :key="material.id">
-                    {{ material.material_name }} - Quantity: {{ material.quantity }}
+                    <li v-for="material in savedMaterials" :key="material.id" class="mb-2">
+                        Material ID: {{ material.material_id }}
+                        <!-- Add more details as needed -->
                     </li>
                 </ul>
             </div>
@@ -26,3 +27,4 @@ const savedMaterials = ref(props.savedMaterials || []); // Ensure it's always an
         </div>
     </AuthenticatedLayout>
 </template>
+
