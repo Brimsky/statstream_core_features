@@ -31,9 +31,6 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 // Web Routes for Dashboard and Category Pages
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -41,40 +38,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
-    // Route::get('',[NewsController::class,'news'])->name('');
-    Route::get('/vip-section', [EnsureUserIsVip::class, 'index'])->middleware('isVip');
+    // Route::get('/vip-section', [EnsureUserIsVip::class, 'index'])->middleware('vip');
 
     //Timber stuff
     Route::get('/timber-category', [TimberSpeciesController::class, 'index'])->name('timber-category.index');
     Route::get('/timber-chart/{species}', [TimberSpeciesController::class, 'show'])->name('timber-chart.show');
-// In routes/web.php
     Route::post('/api/save-material', [SavedMaterialsController::class, 'store'])
-    ->middleware(['auth', 'web']);
+    ->middleware(['auth', 'web', 'isVip']);
 
-
-    // In your routes/web.php
-     Route::get('/saved-materials', [SavedMaterialsController::class, 'index'])
-     ->name('saved-materials.index')
-     ->middleware('vip'); // Ensure this is accessible only by authenticated users
-
+    Route::get('/saved-materials', [SavedMaterialsController::class, 'index'])
+        ->name('saved-materials.index')->middleware(['auth', 'isVip']);
 });
-
-//VIP area in web page
-
-// Route::middleware(['auth', 'isVip'])->group(function () {
-//     Route::get('/vip-section', [SomeController::class, 'vipOnlyArea'])->name('vip-section');
-// });
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
-    // Ensure this line is correctly placed within the 'auth' middleware group
-    Route::middleware('auth')->group(function () {
-        Route::post('/toggle-vip', [VipController::class, 'toggleVipStatus'])->name('toggle-vip');
-    });
+    Route::post('/toggle-vip', [VipController::class, 'toggleVipStatus'])->name('toggle-vip');
     
 });
 

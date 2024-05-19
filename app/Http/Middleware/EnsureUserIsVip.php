@@ -5,6 +5,8 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class EnsureUserIsVip
 {
@@ -17,11 +19,20 @@ class EnsureUserIsVip
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::check() || !Auth::user()->vip_status) {
-            // Redirect them to the home page or another page with an error message
-            return redirect('/')->with('error', 'You must be a VIP to access that page.');
+        $userId = Auth::id();
+        Log::info('Checking VIP status for user: ' . $userId);
+
+        $isVip = DB::table('vips')
+                    ->where('user_id', $userId)
+                    ->value('id');
+
+        if ($isVip) {
+            Log::info('User is VIP.');
+            return $next($request);
         }
 
-        return $next($request);
+        Log::warning('User is not VIP.');
+        return redirect('/')->withErrors('You do not have access to this section.');
     }
+
 }
