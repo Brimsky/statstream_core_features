@@ -42,7 +42,7 @@ import { ref } from 'vue';
 const open = ref(false);
 </script>
 
-<template class="antialiased bg-neutral-900">
+<template class="antialiased">
 <!-- Navbar -->
 <div class="text-white  dark:bg-neutral-800 flex h-[60px] m-0 px-[35px] py-0">
     <div class="flex items-center justify-center mx-auto w-11/12">
@@ -56,19 +56,17 @@ const open = ref(false);
         <div>
           
           <div class="md:hidden">
-    <!-- Mobile menu button -->
+
     <button @click="open = !open" class="p-4 focus:outline-none">
-      <!-- Hamburger Icon -->
       <svg v-show="!open" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/>
       </svg>
-      <!-- Close Icon -->
       <svg v-show="open" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
       </svg>
     </button>
 
-    <!-- Mobile menu content -->
+
     <div v-show="open" class="absolute top-0 left-0 w-full bg-neutral-900 text-white z-50">
       <div class="flex items-center justify-between px-4 py-3 border-b border-gray-700">
         <a href="/" class="text-xl font-semibold">STATSTREAM</a>
@@ -78,8 +76,7 @@ const open = ref(false);
           </svg>
         </button>
       </div>
-      <!-- Mobile menu links -->
-      <!-- Dynamic links here -->
+
       <div class="px-2 py-2 space-y-1">
         <a v-if="canLogin">
           <a v-if="$page.props.auth.user">
@@ -92,7 +89,6 @@ const open = ref(false);
             </a>
           </a>
         </a>
-        <!-- Add more links as needed -->
       </div>
     </div>
   </div>
@@ -126,11 +122,9 @@ const open = ref(false);
       </div>
     </div>
 </div>
-<!-- Home page -->
+
 <Start />
 
-
-<!-- Footer -->
 <Footer />
 
 </template>

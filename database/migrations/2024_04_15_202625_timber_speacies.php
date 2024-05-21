@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('seller');
             $table->string('location');
             $table->string('price');
+            $table->string('type');
             $table->date('date');
         });
     }

@@ -5,21 +5,32 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
-import { usePage } from '@inertiajs/vue3';
 import Footer from '../Components/Footers/Footer.vue';
+import { computed } from 'vue';
+import { usePage } from '@inertiajs/vue3';
+import { useDark, useToggle} from '@vueuse/core';
+  
+import lightIcon from '../icons/Logo/icon.png';
+import darkIcon from '../icons/Logo/darkicon.png';
+  
+import lightmode from '../icons/Mode/sun.png'
+import darkmode from '../icons/Mode/moon.png'
+
+const isDark = useDark();
+const toggleDark = useToggle(isDark);
+// console.log(isDark.value);
+  
+const mode = computed(() => isDark.value ? darkmode : lightmode);
+const iconSrc = computed(() => isDark.value ? darkIcon : lightIcon);
+
 
 const { user } = usePage().props.auth;
-
-const showingNavigationDropdown = ref(false);
-
-// Update the path to the logo icon
-import logoIcon from '../icons/Logo/icon.png';
 </script>
 
 <template>
     <div>
-        <div class="min-h-screen bg-gray-100">
-            <nav class="bg-white border-b border-gray-100">
+        <div class="min-h-screen bg-gray-100 dark:bg-neutral-800">
+            <nav class="bg-white border-b border-gray-100 dark:bg-neutral-700">
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
@@ -27,17 +38,17 @@ import logoIcon from '../icons/Logo/icon.png';
                             <!-- Logo -->
                             <div class="scale-50 flex items-center">
                                 <Link :href="route('dashboard')">
-                                    <img :src="logoIcon" alt="Logo" />
+                                    <img :src="iconSrc" alt="Logo" />
                                 </Link>
                             </div>
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink :href="route('dashboard')" class="text-sm font-medium text-gray-500 hover:text-gray-700 p-1">Dashboard</NavLink>
-                                <NavLink :href="route('timber-category.index')" class="text-sm font-medium text-gray-500 hover:text-gray-700 p-1">Timber</NavLink>
+                                <NavLink :href="route('dashboard')" :active="route().current('dashboard')" class="text-sm font-medium text-gray-500 hover:text-gray-700 p-1">Dashboard</NavLink>
+                                <NavLink :href="route('timber-category.index')" :active="route().current('timber-category.index')" class="text-sm font-medium text-gray-500 hover:text-gray-700 p-1">Timber</NavLink>
                                 <!-- <NavLink :href="route('dashboard')" class="text-sm font-medium text-gray-500 hover:text-gray-700 p-1">Market Place</NavLink>
                                 <NavLink :href="route('dashboard')" class="text-sm font-medium text-gray-500 hover:text-gray-700 p-1">News</NavLink> -->
-                                <NavLink v-if="user && user.vip_status" :href="route('saved-materials.index')" class="text-sm font-medium text-gray-500 hover:text-gray-700 p-1">Saved Materials</NavLink>
+                                <NavLink v-if="user && user.vip_status" :href="route('saved-materials.index')" :active="route().current('saved-materials.index')" class="text-sm font-medium text-gray-500 hover:text-gray-700 p-1">Saved Materials</NavLink>
                             </div>
                         </div>
 
@@ -68,7 +79,10 @@ import logoIcon from '../icons/Logo/icon.png';
                                 </Dropdown>
                             </div>
                         </div>
-
+                        <button @click="toggleDark()"
+                  class="py-2 px-4 bg-stone-900 hover:bg-stone-700 dark:hover:bg-stone-400 dark:bg-white  text-white font-bold rounded-xl shadow-md transition duration-150">
+            <img class="h-7" :src="mode" alt="Dark Mode Icon" />
+          </button>
                         <!-- Hamburger -->
                         <div class="-me-2 flex items-center sm:hidden">
                             <button
@@ -93,7 +107,7 @@ import logoIcon from '../icons/Logo/icon.png';
                         </div>
                     </div>
                 </div>
-
+                
                 <!-- Responsive Navigation Menu -->
                 <div :class="{ block: showingNavigationDropdown, hidden: !showingNavigationDropdown }"
                     class="sm:hidden">
@@ -103,13 +117,13 @@ import logoIcon from '../icons/Logo/icon.png';
                         </ResponsiveNavLink>
                     </div>
                     <div class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            Charts
+                        <ResponsiveNavLink :href="route('timber-category.index')" :active="route().current('timber-category')">
+                            Timber Category
                         </ResponsiveNavLink>
                     </div>
                     <div class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            News
+                        <ResponsiveNavLink v-if="user && user.vip_status" :href="route('saved-materials.index')" :active="route().current('saved-materials')">
+                            Saved Materials
                         </ResponsiveNavLink>
                     </div>
 
@@ -129,6 +143,7 @@ import logoIcon from '../icons/Logo/icon.png';
                             </ResponsiveNavLink>
                         </div>
                     </div>
+                    
                 </div>
             </nav>
 

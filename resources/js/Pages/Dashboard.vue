@@ -1,6 +1,8 @@
 <template>
     <AuthenticatedLayout>
-      
+      <div class="dark:bg-neutral-800">
+
+      </div>
     </AuthenticatedLayout>
   </template>
   

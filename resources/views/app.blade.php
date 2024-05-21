@@ -14,8 +14,30 @@
         <!-- Scripts -->
         @routes
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
-        <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.x.x/dist/alpine.min.js" defer></script>
+        <!-- <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.x.x/dist/alpine.min.js" defer></script>
+        <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script>
+        // Enable pusher logging - don't include this in production
+        Pusher.logToConsole = true;
 
+        var pusher = new Pusher('b3d507537fb39f00b817', {
+        cluster: 'eu'
+        });
+
+        var channel = pusher.subscribe('my-channel');
+        channel.bind('my-event', function(data) {
+        app.messages.push(JSON.stringify(data));
+        });
+
+        // Vue application
+        const app = new Vue({
+        el: '#app',
+        data: {
+            messages: [],
+        },
+        });
+    </script> -->
         @inertiaHead
     </head>
     <body class="font-sans antialiased dark:bg-neutral-900 bg-white">

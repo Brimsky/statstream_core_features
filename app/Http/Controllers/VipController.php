@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Vip;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class VipController extends Controller
 {
