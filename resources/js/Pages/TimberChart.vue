@@ -24,6 +24,12 @@
                           <option v-for="seller in uniqueSellers" :key="seller" :value="seller">{{ seller }}</option>
                       </select>
 
+                      <label class="block text-gray-700 text-sm font-bold mb-2" for="filterLocation">Filter by Type</label>
+                      <select v-model="filterType" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+                          <option value="">All Types</option>
+                          <option v-for="type in uniqueType" :key="type" :value="type">{{ type }}</option>
+                      </select>
+
                       <label class="block text-gray-700 text-sm font-bold mb-2" for="filterClass">Filter by Class</label>
                       <select v-model="filterClass" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
                           <option value="">All Classes</option>
@@ -62,6 +68,7 @@
                   </div>
                   <p class="mt-2 text-sm text-gray-600">Price: {{ entry.price }}</p>
                   <p class="text-sm text-gray-600">Class: {{ entry.class }}</p>
+                  <p class="text-sm text-gray-600">type: {{ entry.type }}</p>
               </div>
               <div class="mt-4 md:mt-0 ml-0 md:ml-6 flex space-x-2 md:space-x-4">
                   <button @click="saveMaterial(entry.id)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition-colors duration-300">Save</button>
@@ -94,6 +101,7 @@ const filterClass = ref('');
 const filterDiameter = ref('');
 const filterLength = ref('');
 const filterLocation = ref('');
+const filterType = ref('');
 
 // Compute filtered entries based on multiple criteria
 const filteredEntries = computed(() => {
@@ -128,6 +136,11 @@ const uniqueLength = computed(() => {
 const uniqueLocation = computed(() => {
   const location = new Set(entries.value.map(entry => entry.location));
   return Array.from(location);
+});
+
+const uniqueType = computed(() => {
+  const type = new Set(entries.value.map(entry => entry.type));
+  return Array.from(type);
 });
 
 

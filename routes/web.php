@@ -46,8 +46,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/api/save-material', [SavedMaterialsController::class, 'store'])
     ->middleware(['auth', 'web', 'isVip']);
 
+
     Route::get('/saved-materials', [SavedMaterialsController::class, 'index'])
         ->name('saved-materials.index')->middleware(['auth', 'isVip']);
+
 });
 
 Route::middleware('auth')->group(function () {

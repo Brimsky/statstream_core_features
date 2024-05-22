@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 
 class SavedMaterialsController extends Controller
 {
-public function index()
+    public function index()
     {
         $savedMaterials = FollowedTimber::with('timberSpecies')
             ->where('user_id', Auth::id())
@@ -21,7 +21,7 @@ public function index()
 
         return Inertia::render('SavedMaterials', [
             'savedMaterials' => $savedMaterials
-        ]);
+        ]);   
     }
 
     public function store(Request $request)
