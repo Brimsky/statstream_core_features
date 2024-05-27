@@ -49,7 +49,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/saved-materials', [SavedMaterialsController::class, 'index'])
         ->name('saved-materials.index')->middleware(['auth', 'isVip']);
-
+    Route::delete('/saved-materials/{id}', [SavedMaterialsController::class, 'destroy'])
+        ->name('saved-materials.destroy')->middleware(['auth', 'isVip']);
+    
 });
 
 Route::middleware('auth')->group(function () {

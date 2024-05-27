@@ -13,7 +13,7 @@ class FollowedTimber extends Model
 
     protected $table = 'saved_timbers';
 
-    protected $fillable = ['user_id', 'liked_material', 'notify_status'];
+    protected $fillable = ['user_id', 'liked_material', 'notify_status', 'initial_price'];
 
     public function timberSpecies()
     {

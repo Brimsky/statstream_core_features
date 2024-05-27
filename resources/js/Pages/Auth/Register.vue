@@ -112,11 +112,14 @@
 
   
   <script setup>
+  import lightIcon from '@/icons/Logo/icon.png';
+  import darkIcon from '@/icons/Logo/darkicon.png';
   import { useForm } from '@inertiajs/vue3';
-  // import picture_light from '../icons/Mode/signup_img.png';
-  // import picture_dark from '../icons/Mode/signup_img_dark.png';
-  // const isDark = useDark();
-  // const imgSrc = computed(() => isDark.value ? picture_dark : picture_light);
+  import { computed } from 'vue';
+  import { useDark} from '@vueuse/core';
+
+  const isDark = useDark();
+  const iconSrc = computed(() => isDark.value ? darkIcon : lightIcon);
   
   
   const form = useForm({

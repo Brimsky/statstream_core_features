@@ -79,11 +79,14 @@
 </template>
   
   <script setup>
-  // import lightIcon from '@/icons/Logo/icon.png';
-  // import darkIcon from '@/icons/Logo/darkicon.png';
+  import lightIcon from '@/icons/Logo/icon.png';
+  import darkIcon from '@/icons/Logo/darkicon.png';
   import { useForm } from '@inertiajs/vue3';
-  
-  // const iconSrc = computed(() => isDark.value ? darkIcon : lightIcon);
+  import { computed } from 'vue';
+  import { useDark} from '@vueuse/core';
+
+  const isDark = useDark();
+  const iconSrc = computed(() => isDark.value ? darkIcon : lightIcon);
 
   const form = useForm({
     email: '',
