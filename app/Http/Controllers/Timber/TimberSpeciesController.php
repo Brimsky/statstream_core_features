@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Timber;
 use App\Http\Controllers\Controller;
 use App\Models\Timber\TimberSpecies;
-use App\Models\User;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
-use Inertia\Response;
-use Illuminate\Http\Request;
+
+//use App\Models\User;
+// use Illuminate\Support\Facades\DB;
+// use Inertia\Response;
+// use Illuminate\Http\Request;
 
 
 class TimberSpeciesController extends Controller
@@ -21,9 +22,15 @@ class TimberSpeciesController extends Controller
 
     public function show($species)
     {
-        $entries = TimberSpecies::where('speacies', $species)->get();
+        $entries = TimberSpecies::select('id', 'speacies', 'class', 'diameter', 'length', 'location', 'type', 'price', 'seller', 'date')
+            ->where('speacies', $species)
+            ->orderBy('date', 'desc')
+            ->get()
+            ->unique(function ($item) {
+                return $item['class'] . '-' . $item['diameter'] . '-' . $item['length'] . '-' . $item['location'] . '-' . $item['type'];
+            });
+
         return Inertia::render('TimberChart', ['entries' => $entries, 'species' => $species]);
     }
-
 }
 
