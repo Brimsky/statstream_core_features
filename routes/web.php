@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VipController;
 use App\Http\Controllers\Timber\TimberSpeciesController;
 use App\Http\Controllers\Timber\SavedMaterialsController;
+use App\Http\Controllers\StatisticsController;
 
 // use App\Http\Controllers\News\NewsController;
 use App\Http\Middleware\EnsureUserIsVip;
@@ -32,11 +33,14 @@ Route::get('/', function () {
 });
 
 
-// Web Routes for Dashboard and Category Pages
+// Web Routes Pages
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
+    Route::get('/api/user-count', [StatisticsController::class, 'getUserCount']);
+    Route::get('/api/timber-count', [StatisticsController::class, 'getTimberCount']);
+
 
     // Route::get('/vip-section', [EnsureUserIsVip::class, 'index'])->middleware('vip');
 
@@ -46,12 +50,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/api/save-material', [SavedMaterialsController::class, 'store'])
     ->middleware(['auth', 'web', 'isVip']);
 
-
     Route::get('/saved-materials', [SavedMaterialsController::class, 'index'])
         ->name('saved-materials.index')->middleware(['auth', 'isVip']);
     Route::delete('/saved-materials/{id}', [SavedMaterialsController::class, 'destroy'])
         ->name('saved-materials.destroy')->middleware(['auth', 'isVip']);
-    
 });
 
 Route::middleware('auth')->group(function () {
@@ -59,7 +61,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/toggle-vip', [VipController::class, 'toggleVipStatus'])->name('toggle-vip');
-    
 });
 
 

@@ -31,21 +31,19 @@ const vipStatus = computed(() => props.user?.vip_status);
 </script>
 
 <template>
-    <Head title="Profile" />
-
     <AuthenticatedLayout>
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Profile</h2>
-            <div>
-                <p v-if="user && user.vip_status">You are a VIP Member!</p>
-                <p v-else>You are not a VIP Member.</p>
-                <button v-if="!user.vip_status" @click="toggleVip">Become a VIP</button>
-            </div>
-        </template>
 
+        <div class="max-w-md mx-auto mt-10 p-6 bg-white dark:bg-neutral-800 rounded-xl shadow-lg">
+    <div class="text-center dark:text-white text-black">
+      <h2 class="text-2xl font-bold mb-4">Membership Status</h2>
+      <p v-if="user && user.vip_status" class="mb-4 text-xl font-bold">You are a <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">VIP Member!</span></p>
+      <p v-else class="mb-4 text-lg">You are not a VIP Member.</p>
+      <button v-if="!user.vip_status" @click="toggleVip" class="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-lg shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-2 transition duration-150">Become a VIP</button>
+    </div>
+  </div>
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-                <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                <div class="p-4 sm:p-8 dark:bg-neutral-800 bg-white shadow sm:rounded-lg">
                     <UpdateProfileInformationForm
                         :must-verify-email="mustVerifyEmail"
                         :status="status"
@@ -53,11 +51,11 @@ const vipStatus = computed(() => props.user?.vip_status);
                     />
                 </div>
 
-                <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                <div class="p-4 sm:p-8 dark:bg-neutral-800 bg-white shadow sm:rounded-lg">
                     <UpdatePasswordForm class="max-w-xl" />
                 </div>
 
-                <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                <div class="p-4 sm:p-8 dark:bg-neutral-800 bg-white shadow sm:rounded-lg">
                     <DeleteUserForm class="max-w-xl" />
                 </div>
             </div>

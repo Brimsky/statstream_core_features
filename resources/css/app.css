@@ -23,9 +23,9 @@ body {
   }
 
   /* Navbar */
-  .navbar-btn{
-  @apply dark:bg-stone-50 dark:text-black dark:font-bold font-bold dark:text-lg text-lg text-white py-1.5 px-4 rounded-xl justify-center dark:hover:bg-stone-400 dark:hover:shadow-lg bg-stone-900 hover:shadow-lg transition w-40 text-center;
-  }
+  .navbar-btn {
+  @apply dark:bg-stone-50 dark:text-black dark:font-bold font-bold dark:text-lg text-lg text-white py-1.5 px-4 rounded-xl justify-center dark:hover:bg-stone-400 dark:hover:shadow-lg bg-stone-900 hover:shadow-lg transition w-40 whitespace-nowrap text-center;
+}
 }
 
 /* @layer base{

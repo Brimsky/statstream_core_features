@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
 
-class TimberSeeder extends Seeder
+class UpdateTimberSpeciesSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -22,22 +22,24 @@ class TimberSeeder extends Seeder
         $locations = ['Rīga', 'Daugavpils', 'Cesis', 'Valmiera', 'Drusti', 'Salacgrīva', 'Mērsrags', 'Jēkabpils', 'Gulbene'];
         $types = ['Finieris', 'Papīrmalka', 'Malka', 'Gūlsnis', 'Zāģbaļķi'];
 
-        $data = [];
+        DB::table('timber_species')->where('price', '<', 100)->update([
+            'price' => DB::raw('price + 10'),
+        ]);
 
-        foreach (range(10, 60) as $diameter) {
-            for ($i = 0; $i < 300 / (60 - 10 + 1); $i++) {
-                $data[] = [
-                    'speacies' => $faker->randomElement($species),
-                    'class' => $faker->randomElement($classes),
-                    'diameter' => $diameter,
-                    'length' => $faker->randomElement($lengths),
-                    'seller' => $faker->randomElement($sellers),
-                    'location' => $faker->randomElement($locations),
-                    'price' => $faker->numberBetween(40, 120),
-                    'type' => $faker->randomElement($types),
-                    'date' => $faker->date(),
-                ];
-            }
+        // Add new records
+        $data = [];
+        for ($i = 0; $i < 100; $i++) {
+            $data[] = [
+                'speacies' => $faker->randomElement($species),
+                'class' => $faker->randomElement($classes),
+                'diameter' => $faker->numberBetween(10, 50),
+                'length' => $faker->randomElement($lengths),
+                'seller' => $faker->randomElement($sellers),
+                'location' => $faker->randomElement($locations),
+                'price' => $faker->numberBetween(40, 120),
+                'type' => $faker->randomElement($types),
+                'date' => $faker->date(),
+            ];
         }
 
         DB::table('timber_species')->insert($data);

@@ -10,8 +10,4 @@ class Vip extends Model
     use HasFactory;
 
     protected $fillable = ['user_id', 'saved_materials_id', 'status'];
-
-    
 }
-
-
