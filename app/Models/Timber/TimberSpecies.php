@@ -15,6 +15,7 @@ class TimberSpecies extends Model
         'length',
         'location',
         'price',
+        'url',
         'date'
     ];
     use HasFactory;

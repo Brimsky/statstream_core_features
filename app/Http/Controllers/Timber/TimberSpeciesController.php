@@ -22,7 +22,7 @@ class TimberSpeciesController extends Controller
 
     public function show($species)
     {
-        $entries = TimberSpecies::select('id', 'speacies', 'class', 'diameter', 'length', 'location', 'type', 'price', 'seller', 'date')
+        $entries = TimberSpecies::select('id', 'speacies', 'class', 'diameter', 'length', 'location', 'type', 'price', 'seller', 'date', 'url')
             ->where('speacies', $species)
             ->orderBy('date', 'desc')
             ->get()

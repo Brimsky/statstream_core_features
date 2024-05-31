@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('location');
             $table->string('price');
             $table->string('type');
+            $table->string('url');
             $table->date('date');
         });
     }

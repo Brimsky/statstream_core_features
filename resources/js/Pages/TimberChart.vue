@@ -68,7 +68,7 @@
               <p class="text-xl font-bold dark:text-white text-black">Price: ${{ entry.price }}</p>
               <div class="flex space-x-2 md:space-x-4">
                 <button @click="saveMaterial(entry.id)" class="bg-blue-500 dark:bg-purple-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition-colors duration-300">Save</button>
-                <button class="bg-blue-500 dark:bg-purple-500 hover:bg-blue-700 text-white py-2 px-4 rounded-md transition-colors duration-300">Find out more</button>
+                <a :href="entry.url" target="_blank" class="bg-blue-500 dark:bg-purple-500 hover:bg-blue-700 text-white py-2 px-4 rounded-md transition-colors duration-300">Find out more</a>
               </div>
             </div>
           </div>
