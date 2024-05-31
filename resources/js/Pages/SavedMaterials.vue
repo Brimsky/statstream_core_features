@@ -22,6 +22,7 @@
                 </div>
                 <div>
                   <h5 class="text-sm font-semibold text-black dark:text-white">{{ material.timber_species.speacies }}</h5>
+                  <h5 class="text-sm font-semibold text-black dark:text-white">{{ material.timber_species.seller }}</h5>
                   <span class="text-xs font-medium text-black dark:text-white" >Class: {{ material.timber_species.class }}</span>
                 </div>
               </div>
