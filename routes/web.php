@@ -5,9 +5,10 @@ use App\Http\Controllers\VipController;
 use App\Http\Controllers\Timber\TimberSpeciesController;
 use App\Http\Controllers\Timber\SavedMaterialsController;
 use App\Http\Controllers\StatisticsController;
-
+use App\Http\Controllers\Timber\TimberListings;
 // use App\Http\Controllers\News\NewsController;
 use App\Http\Middleware\EnsureUserIsVip;
+use Illuminate\Database\Query\IndexHint;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -41,9 +42,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/api/user-count', [StatisticsController::class, 'getUserCount']);
     Route::get('/api/timber-count', [StatisticsController::class, 'getTimberCount']);
 
-
-    // Route::get('/vip-section', [EnsureUserIsVip::class, 'index'])->middleware('vip');
-
     //Timber stuff
     Route::get('/timber-category', [TimberSpeciesController::class, 'index'])->name('timber-category.index');
     Route::get('/timber-chart/{species}', [TimberSpeciesController::class, 'show'])->name('timber-chart.show');
@@ -54,6 +52,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('saved-materials.index')->middleware(['auth', 'isVip']);
     Route::delete('/saved-materials/{id}', [SavedMaterialsController::class, 'destroy'])
         ->name('saved-materials.destroy')->middleware(['auth', 'isVip']);
+
+
+    Route::get('/user-listing/{id}', [TimberListings::class, 'show'])->name('user-listings.index');
+    Route::get('/user-listings', [TimberListings::class, 'index'])->name('user-listings.show');
+
 });
 
 Route::middleware('auth')->group(function () {

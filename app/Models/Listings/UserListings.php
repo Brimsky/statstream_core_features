@@ -1,23 +1,28 @@
 <?php
 
-namespace App\Models\Timber;
+namespace App\Models\Listings;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TimberSpecies extends Model
+class UserListings extends Model
 {
-    protected $fillable = [
+    
+
+    protected $fillable =[
         'id',
+        'user_id',
+        'seller_company_name',
         'species',
+        'sertificate',
         'class',
         'diameter',
         'length',
         'location',
         'price',
-        'url',
-        'seller',
+        'seller_url',
         'date'
     ];
+
     use HasFactory;
 }

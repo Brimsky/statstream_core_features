@@ -187,7 +187,6 @@ const saveMaterial = async (timberSpeciesId) => {
 };
 
 watchEffect(() => {
-  console.log('Entries:', entries.value); // Log the entries to debug
   updateChart();
 });
 

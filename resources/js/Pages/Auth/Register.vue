@@ -16,7 +16,7 @@
         </div>
         <div class="col-span-6 sm:col-span-3">
           <label for="LastName" class="block text-sm font-medium text-gray-700 dark:text-white">Last Name</label>
-          <input type="text" placeholder="Marley" id="LastName" name="last_name" class="mt-1 w-full rounded-md border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-600 text-sm text-gray-700 dark:text-white shadow-sm">
+          <input type="text" v-model="form.surname" placeholder="Marley" id="LastName" name="last_name" class="mt-1 w-full rounded-md border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-600 text-sm text-gray-700 dark:text-white shadow-sm">
         </div>
         <div class="col-span-6">
           <label for="Email" class="block text-sm font-medium text-gray-700 dark:text-white">Email</label>
@@ -66,6 +66,7 @@ const iconSrc = computed(() => isDark.value ? darkIcon : lightIcon);
 
 const form = useForm({
   name: '',
+  surname:'',
   email: '',
   password: '',
   password_confirmation: '',

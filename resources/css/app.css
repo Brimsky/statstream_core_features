@@ -28,19 +28,3 @@ body {
 }
 }
 
-/* @layer base{
-  :root{
-    --color-bkg: 248, 250, 252;
-    --color-contents: 30, 41, 59;
-    --color-accent1:208, 208, 208;
-    --color-accent2:153, 153, 153;
-  }
-  @media (prefers-color-scheme:dark){
-    :root{
-      --color-bkg: 30, 30, 30;
-      --color-contents: 248, 248, 248;
-      --color-accent1: 208, 208, 208;
-      --color-accent2: 153, 153, 153;
-    }
-  }
-} */
