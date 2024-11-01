@@ -1,50 +1,93 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
-import { computed } from "vue";
-import { useDark, useToggle } from "@vueuse/core";
-import { ref } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 
+// Import components
+import Start from "../Components/Home/About.vue";
+import Footer from "../Components/Footers/Footer.vue";
+
+// Import icons
 import lightIcon from "../icons/Logo/icon.png";
 import darkIcon from "../icons/Logo/darkicon.png";
 import lightmode from "../icons/Mode/sun.png";
 import darkmode from "../icons/Mode/moon.png";
 
-import Start from "../Components/Home/About.vue";
-import Footer from "../Components/Footers/Footer.vue";
+const props = defineProps({
+    canLogin: Boolean,
+    canRegister: Boolean,
+    laravelVersion: String,
+    phpVersion: String,
+});
 
-const isDark = useDark();
-const toggleDark = useToggle(isDark);
+// Dark mode state management
+const isDark = ref(false);
+const open = ref(false);
 
+// Computed values for icons
 const mode = computed(() => (isDark.value ? darkmode : lightmode));
 const iconSrc = computed(() => (isDark.value ? darkIcon : lightIcon));
 
-defineProps({
-    canLogin: {
-        type: Boolean,
-        required: true,
-    },
-    canRegister: {
-        type: Boolean,
-        required: true,
-    },
-    laravelVersion: {
-        type: String,
-        required: true,
-    },
-    phpVersion: {
-        type: String,
-        required: true,
-    },
+// Computed class for gradient text
+const gradientTextClass = computed(
+    () =>
+        isDark.value
+            ? "bg-gradient-to-r from-purple-400 via-pink-400 to-blue-500" // Dark mode gradient
+            : "bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-500", // Light mode gradient
+);
+
+// Initialize dark mode
+onMounted(() => {
+    // Check local storage first
+    const savedTheme = localStorage.getItem("theme");
+
+    // Check system preference if no saved theme
+    if (!savedTheme) {
+        isDark.value = window.matchMedia(
+            "(prefers-color-scheme: dark)",
+        ).matches;
+    } else {
+        isDark.value = savedTheme === "dark";
+    }
+
+    // Apply theme immediately
+    applyTheme(isDark.value);
+
+    // Listen for system theme changes
+    window
+        .matchMedia("(prefers-color-scheme: dark)")
+        .addEventListener("change", (e) => {
+            if (!localStorage.getItem("theme")) {
+                isDark.value = e.matches;
+                applyTheme(e.matches);
+            }
+        });
 });
 
-const open = ref(false);
+// Watch for theme changes
+watch(isDark, (newValue) => {
+    applyTheme(newValue);
+    localStorage.setItem("theme", newValue ? "dark" : "light");
+});
 
-// Close mobile menu when clicking outside
+// Function to apply theme
+const applyTheme = (dark) => {
+    if (dark) {
+        document.documentElement.classList.add("dark");
+    } else {
+        document.documentElement.classList.remove("dark");
+    }
+};
+
+// Toggle dark mode
+const toggleDark = () => {
+    isDark.value = !isDark.value;
+};
+
+// Mobile menu functions
 const closeMenu = () => {
     open.value = false;
 };
 
-// Close menu on route change
 const handleRouteChange = () => {
     open.value = false;
 };
@@ -53,7 +96,9 @@ const handleRouteChange = () => {
 <template>
     <div class="antialiased">
         <!-- Navbar -->
-        <div class="relative text-white dark:bg-neutral-800 bg-white shadow-md">
+        <div
+            class="relative bg-white dark:bg-neutral-800 shadow-md transition-colors duration-200"
+        >
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-16">
                     <!-- Logo and Brand -->
@@ -61,7 +106,10 @@ const handleRouteChange = () => {
                         <a href="/" class="flex items-center space-x-2">
                             <img class="h-8 w-auto" :src="iconSrc" alt="Icon" />
                             <span
-                                class="dark:text-white text-black text-xl md:text-3xl font-bold tracking-wider"
+                                :class="[
+                                    gradientTextClass,
+                                    'text-xl md:text-3xl font-bold tracking-wider bg-clip-text text-transparent transition-all duration-300',
+                                ]"
                             >
                                 STATSTREAM
                             </span>
@@ -76,7 +124,7 @@ const handleRouteChange = () => {
                         <template v-if="$page.props.auth.user">
                             <Link
                                 :href="route('dashboard')"
-                                class="navbar-btn hover:bg-neutral-700 px-4 py-2 rounded-lg transition-colors"
+                                class="text-black dark:text-white hover:bg-neutral-100 dark:hover:bg-neutral-700 px-4 py-2 rounded-lg transition-colors duration-200"
                             >
                                 Dashboard
                             </Link>
@@ -84,26 +132,27 @@ const handleRouteChange = () => {
                         <template v-else>
                             <Link
                                 :href="route('login')"
-                                class="navbar-btn hover:bg-neutral-700 px-4 py-2 rounded-lg transition-colors"
+                                class="text-black dark:text-white hover:bg-neutral-100 dark:hover:bg-neutral-700 px-4 py-2 rounded-lg transition-colors duration-200"
                             >
                                 Log in
                             </Link>
                             <Link
                                 v-if="canRegister"
                                 :href="route('register')"
-                                class="navbar-btn hover:bg-neutral-700 px-4 py-2 rounded-lg transition-colors"
+                                class="text-black dark:text-white hover:bg-neutral-100 dark:hover:bg-neutral-700 px-4 py-2 rounded-lg transition-colors duration-200"
                             >
                                 Register
                             </Link>
                         </template>
                         <button
                             @click="toggleDark"
-                            class="p-2 rounded-lg bg-stone-900 hover:bg-stone-700 dark:hover:bg-stone-400 dark:bg-white text-white transition-colors"
+                            class="p-2 rounded-lg bg-stone-900 dark:bg-white hover:bg-stone-700 dark:hover:bg-stone-200 transition-colors duration-200"
+                            aria-label="Toggle dark mode"
                         >
                             <img
                                 class="h-6 w-6"
                                 :src="mode"
-                                alt="Dark Mode Icon"
+                                alt="Theme toggle"
                             />
                         </button>
                     </div>
@@ -112,7 +161,7 @@ const handleRouteChange = () => {
                     <div class="md:hidden">
                         <button
                             @click="open = !open"
-                            class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-neutral-700 focus:outline-none"
+                            class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-neutral-700 focus:outline-none transition-colors duration-200"
                             :aria-expanded="open"
                         >
                             <span class="sr-only">Open main menu</span>
@@ -162,13 +211,13 @@ const handleRouteChange = () => {
             >
                 <div
                     v-if="open"
-                    class="md:hidden absolute w-full bg-neutral-800 z-50"
+                    class="md:hidden absolute w-full bg-white dark:bg-neutral-800 z-50 transition-colors duration-200"
                 >
                     <div class="px-2 pt-2 pb-3 space-y-1">
                         <template v-if="$page.props.auth.user">
                             <Link
                                 :href="route('dashboard')"
-                                class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-neutral-700"
+                                class="block px-3 py-2 rounded-md text-base font-medium text-black dark:text-white hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors duration-200"
                             >
                                 Dashboard
                             </Link>
@@ -176,23 +225,23 @@ const handleRouteChange = () => {
                         <template v-else>
                             <Link
                                 :href="route('login')"
-                                class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-neutral-700"
+                                class="block px-3 py-2 rounded-md text-base font-medium text-black dark:text-white hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors duration-200"
                             >
                                 Log in
                             </Link>
                             <Link
                                 v-if="canRegister"
                                 :href="route('register')"
-                                class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-neutral-700"
+                                class="block px-3 py-2 rounded-md text-base font-medium text-black dark:text-white hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors duration-200"
                             >
                                 Register
                             </Link>
                         </template>
                         <button
                             @click="toggleDark"
-                            class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-white hover:bg-neutral-700"
+                            class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-black dark:text-white hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors duration-200"
                         >
-                            Dark Mode
+                            Toggle Dark Mode
                         </button>
                     </div>
                 </div>
