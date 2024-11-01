@@ -1,8 +1,7 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
-import { ref, onMounted, watch, computed } from "vue";
-
-// Import components
+import { computed, ref } from "vue";
+import { useTheme } from "@/Components/useTheme.js";
 import Start from "../Components/Home/About.vue";
 import Footer from "../Components/Footers/Footer.vue";
 
@@ -19,8 +18,8 @@ const props = defineProps({
     phpVersion: String,
 });
 
-// Dark mode state management
-const isDark = ref(false);
+// Use the theme manager with explicit handler
+const { isDark, toggleTheme } = useTheme();
 const open = ref(false);
 
 // Computed values for icons
@@ -28,59 +27,17 @@ const mode = computed(() => (isDark.value ? darkmode : lightmode));
 const iconSrc = computed(() => (isDark.value ? darkIcon : lightIcon));
 
 // Computed class for gradient text
-const gradientTextClass = computed(
-    () =>
-        isDark.value
-            ? "bg-gradient-to-r from-purple-400 via-pink-400 to-blue-500" // Dark mode gradient
-            : "bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-500", // Light mode gradient
+const gradientTextClass = computed(() =>
+    isDark.value
+        ? "bg-gradient-to-r from-purple-400 via-pink-400 to-blue-500"
+        : "bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-500",
 );
 
-// Initialize dark mode
-onMounted(() => {
-    // Check local storage first
-    const savedTheme = localStorage.getItem("theme");
-
-    // Check system preference if no saved theme
-    if (!savedTheme) {
-        isDark.value = window.matchMedia(
-            "(prefers-color-scheme: dark)",
-        ).matches;
-    } else {
-        isDark.value = savedTheme === "dark";
-    }
-
-    // Apply theme immediately
-    applyTheme(isDark.value);
-
-    // Listen for system theme changes
-    window
-        .matchMedia("(prefers-color-scheme: dark)")
-        .addEventListener("change", (e) => {
-            if (!localStorage.getItem("theme")) {
-                isDark.value = e.matches;
-                applyTheme(e.matches);
-            }
-        });
-});
-
-// Watch for theme changes
-watch(isDark, (newValue) => {
-    applyTheme(newValue);
-    localStorage.setItem("theme", newValue ? "dark" : "light");
-});
-
-// Function to apply theme
-const applyTheme = (dark) => {
-    if (dark) {
-        document.documentElement.classList.add("dark");
-    } else {
-        document.documentElement.classList.remove("dark");
-    }
-};
-
-// Toggle dark mode
-const toggleDark = () => {
-    isDark.value = !isDark.value;
+// Explicit theme toggle handler
+const handleThemeToggle = () => {
+    toggleTheme();
+    // Optional: close mobile menu when toggling theme
+    open.value = false;
 };
 
 // Mobile menu functions
@@ -144,8 +101,9 @@ const handleRouteChange = () => {
                                 Register
                             </Link>
                         </template>
+                        <!-- Update the theme toggle button to use handleThemeToggle -->
                         <button
-                            @click="toggleDark"
+                            @click="handleThemeToggle"
                             class="p-2 rounded-lg bg-stone-900 dark:bg-white hover:bg-stone-700 dark:hover:bg-stone-200 transition-colors duration-200"
                             aria-label="Toggle dark mode"
                         >
@@ -238,10 +196,14 @@ const handleRouteChange = () => {
                             </Link>
                         </template>
                         <button
-                            @click="toggleDark"
-                            class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-black dark:text-white hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors duration-200"
+                            @click="handleThemeToggle"
+                            class="w-full text-left px-3 py-2 p-2 rounded-lg bg-stone-900 dark:bg-white text-base font-medium text-black dark:text-white hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors duration-200"
                         >
-                            Toggle Dark Mode
+                            <img
+                                class="h-6 w-6"
+                                :src="mode"
+                                alt="Theme toggle"
+                            />
                         </button>
                     </div>
                 </div>
