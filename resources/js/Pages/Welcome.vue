@@ -25,8 +25,6 @@ const open = ref(false);
 // Computed values for icons
 const mode = computed(() => (isDark.value ? darkmode : lightmode));
 const iconSrc = computed(() => (isDark.value ? darkIcon : lightIcon));
-
-// Computed class for gradient text
 const gradientTextClass = computed(() =>
     isDark.value
         ? "bg-gradient-to-r from-purple-400 via-pink-400 to-blue-500"

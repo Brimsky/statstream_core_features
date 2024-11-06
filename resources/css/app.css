@@ -1,30 +1,51 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@tailwind base;
-@tailwind utilities;
+
+:root {
+    --bg-primary: #ffffff;
+    --text-primary: #000000;
+}
+
+:root.dark {
+    --bg-primary: #1f1f1f;
+    --text-primary: #ffffff;
+}
 
 body {
-  @apply bg-white dark:bg-neutral-900
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
+}
+
+* {
+    transition:
+        background-color 0.3s ease,
+        border-color 0.3s ease;
+}
+
+body {
+    @apply bg-white dark:bg-neutral-900;
 }
 
 @layer components {
-  /* registration */
-  .form-label {
-    @apply block text-sm font-bold mb-2 text-gray-700 dark:text-gray-200;
-  }
-  
-  .form-input {
-    @apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-white dark:bg-neutral-900 dark:text-white leading-tight focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 dark:focus:border-violet-500 dark:focus:ring-violet-500;
-  }
+    /* registration */
+    .form-label {
+        @apply block text-sm font-bold mb-2 text-gray-700 dark:text-gray-200;
+    }
 
-  .form-button {
-    @apply w-full text-white bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded focus:outline-none focus:ring  dark:bg-violet-600 dark:hover:bg-violet-800;
-  }
+    .form-input {
+        @apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-white dark:bg-neutral-900 dark:text-white leading-tight focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 dark:focus:border-violet-500 dark:focus:ring-violet-500;
+    }
 
-  /* Navbar */
-  .navbar-btn {
-  @apply dark:bg-stone-50 dark:text-black dark:font-bold font-bold dark:text-lg text-lg text-white py-1.5 px-4 rounded-xl justify-center dark:hover:bg-stone-400 dark:hover:shadow-lg bg-stone-900 hover:shadow-lg transition w-40 whitespace-nowrap text-center;
+    .form-button {
+        @apply w-full text-white bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded focus:outline-none focus:ring  dark:bg-violet-600 dark:hover:bg-violet-800;
+    }
+
+    /* Navbar */
+    .navbar-btn {
+        @apply dark:bg-stone-50 dark:text-black dark:font-bold font-bold dark:text-lg text-lg text-white py-1.5 px-4 rounded-xl justify-center dark:hover:bg-stone-400 dark:hover:shadow-lg bg-stone-900 hover:shadow-lg transition w-40 whitespace-nowrap text-center;
+    }
 }
-}
-

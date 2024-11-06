@@ -1,89 +1,61 @@
-// Update your file at: resources/js/Components/useTheme.js
+// resources/js/Components/useTheme.js
+import { onMounted } from "vue";
+import { themeStore } from "./Store/themeStore.js";
 
-import { ref, watch, onMounted } from "vue";
-
-// Create a shared state
-const sharedDark = ref(false);
-
-// Theme manager factory
-const createThemeManager = () => {
+export const useTheme = () => {
     const initTheme = () => {
+        if (themeStore.initialized.value) return;
+
         // Check localStorage first
         const savedTheme = localStorage.getItem("theme");
 
         if (savedTheme) {
-            sharedDark.value = savedTheme === "dark";
+            themeStore.isDark.value = savedTheme === "dark";
         } else {
-            // If no saved theme, check system preference
-            sharedDark.value = window.matchMedia(
+            // Check system preference
+            themeStore.isDark.value = window.matchMedia(
                 "(prefers-color-scheme: dark)",
             ).matches;
         }
 
-        // Apply theme immediately
-        applyTheme(sharedDark.value);
+        // Apply theme
+        applyTheme(themeStore.isDark.value);
+        themeStore.initialized.value = true;
+    };
+
+    const applyTheme = (dark) => {
+        if (dark) {
+            document.documentElement.classList.add("dark");
+            document.documentElement.classList.remove("light");
+        } else {
+            document.documentElement.classList.remove("dark");
+            document.documentElement.classList.add("light");
+        }
+        localStorage.setItem("theme", dark ? "dark" : "light");
+    };
+
+    const toggleTheme = () => {
+        themeStore.isDark.value = !themeStore.isDark.value;
+        applyTheme(themeStore.isDark.value);
+    };
+
+    // Initialize theme on component mount
+    onMounted(() => {
+        initTheme();
 
         // Listen for system theme changes
         window
             .matchMedia("(prefers-color-scheme: dark)")
             .addEventListener("change", (e) => {
                 if (!localStorage.getItem("theme")) {
-                    sharedDark.value = e.matches;
+                    themeStore.isDark.value = e.matches;
                     applyTheme(e.matches);
                 }
             });
-    };
-
-    const applyTheme = (dark) => {
-        if (dark) {
-            document.documentElement.classList.add("dark");
-        } else {
-            document.documentElement.classList.remove("dark");
-        }
-        localStorage.setItem("theme", dark ? "dark" : "light");
-    };
-
-    const toggleTheme = () => {
-        sharedDark.value = !sharedDark.value;
-    };
-
-    // Watch for changes
-    watch(sharedDark, (newValue) => {
-        applyTheme(newValue);
     });
 
     return {
-        isDark: sharedDark,
+        isDark: themeStore.isDark,
         toggleTheme,
-        initTheme,
-    };
-};
-
-// Create a singleton instance
-const themeManager = createThemeManager();
-
-// Plugin installation
-export const ThemePlugin = {
-    install: (app) => {
-        app.config.globalProperties.$theme = themeManager;
-        app.provide("theme", themeManager);
-    },
-};
-
-// Composable for use in components
-export const useTheme = () => {
-    // Initialize on mount if not already initialized
-    onMounted(() => {
-        if (
-            !document.documentElement.classList.contains("dark") &&
-            !document.documentElement.classList.contains("light")
-        ) {
-            themeManager.initTheme();
-        }
-    });
-
-    return {
-        isDark: themeManager.isDark,
-        toggleTheme: themeManager.toggleTheme,
     };
 };

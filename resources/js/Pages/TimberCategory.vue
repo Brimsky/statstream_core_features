@@ -122,6 +122,9 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { defineProps } from "vue";
 import { Link } from "@inertiajs/vue3";
+import { useTheme } from "@/Components/useTheme.js";
+
+const { isDark, toggleTheme } = useTheme();
 
 const props = defineProps({
     species: Array,

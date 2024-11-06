@@ -161,6 +161,9 @@
 import { ref, onMounted } from "vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import axios from "axios";
+import { useTheme } from "@/Components/useTheme.js";
+
+const { isDark, toggleTheme } = useTheme();
 
 // State to store counts
 const userCount = ref(0);

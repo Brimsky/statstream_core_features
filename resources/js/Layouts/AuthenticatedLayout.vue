@@ -239,7 +239,6 @@
 import { ref, computed } from "vue";
 import { Link } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
-import { useTheme } from "@/Components/useTheme.js";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import NavLink from "@/Components/NavLink.vue";
@@ -253,6 +252,8 @@ import lightmode from "../icons/Mode/sun.png";
 import darkmode from "../icons/Mode/moon.png";
 
 // Use theme manager
+import { useTheme } from "@/Components/useTheme.js";
+
 const { isDark, toggleTheme } = useTheme();
 
 // Computed values for icons

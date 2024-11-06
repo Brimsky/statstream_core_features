@@ -287,12 +287,13 @@
 <script setup>
 import { useForm } from "@inertiajs/vue3";
 import { computed } from "vue";
-import { useDark } from "@vueuse/core";
 import InputError from "@/Components/InputError.vue";
 import lightIcon from "@/icons/Logo/icon.png";
 import darkIcon from "@/icons/Logo/darkicon.png";
+import { useTheme } from "@/Components/useTheme.js";
 
-const isDark = useDark();
+const { isDark, toggleTheme } = useTheme();
+
 const iconSrc = computed(() => (isDark.value ? darkIcon : lightIcon));
 
 const form = useForm({
