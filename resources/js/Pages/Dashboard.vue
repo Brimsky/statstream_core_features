@@ -158,39 +158,51 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { Head } from "@inertiajs/vue3";
+import { ref, computed, onMounted } from "vue";
+import { useTheme } from "@/composables/useTheme";
 import axios from "axios";
-import { useTheme } from "@/Components/useTheme.js";
 
-const { isDark, toggleTheme } = useTheme();
+const { isDark, gradients } = useTheme();
+
+// Computed gradient text class
+const gradientTextClass = computed(() => gradients.text.value);
 
 // State to store counts
 const userCount = ref(0);
 const timberCount = ref(0);
 
-// Fetch user count from the backend
+// Function to fetch user count
 const fetchUserCount = async () => {
     try {
-        const response = await axios.get("/api/user-count");
-        userCount.value = response.data.userCount;
+        const response = await axios.get('/api/user-count');
+        userCount.value = response.data.count;
     } catch (error) {
-        console.error("Error fetching user count:", error);
+        console.error('Error fetching user count:', error);
     }
 };
 
+// Function to fetch timber count
 const fetchtimberCount = async () => {
     try {
-        const response = await axios.get("/api/timber-count");
-        timberCount.value = response.data.timberCount;
+        const response = await axios.get('/api/timber-count');
+        timberCount.value = response.data.count;
     } catch (error) {
-        console.error("Error fetching timber count:", error);
+        console.error('Error fetching timber count:', error);
     }
 };
 
+// Fetch data on component mount
 onMounted(() => {
     fetchtimberCount();
     fetchUserCount();
+});
+
+defineProps({
+    auth: {
+        user: Object,
+    },
 });
 </script>
 

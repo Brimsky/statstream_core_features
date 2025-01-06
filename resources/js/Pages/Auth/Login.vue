@@ -31,11 +31,7 @@
                 <img class="h-12 w-auto" :src="iconSrc" alt="Icon" />
                 <span
                     class="bg-clip-text text-transparent"
-                    :class="
-                        isDark
-                            ? 'bg-gradient-to-r from-purple-400 to-blue-500'
-                            : 'bg-gradient-to-r from-blue-600 to-teal-500'
-                    "
+                    :class="gradientTextClass"
                 >
                     STATSTREAM
                 </span>
@@ -87,11 +83,7 @@
                                 <div class="text-center">
                                     <h1
                                         class="text-2xl font-bold bg-clip-text text-transparent"
-                                        :class="
-                                            isDark
-                                                ? 'bg-gradient-to-r from-purple-400 to-blue-500'
-                                                : 'bg-gradient-to-r from-blue-600 to-teal-500'
-                                        "
+                                        :class="gradientTextClass"
                                     >
                                         Sign In
                                     </h1>
@@ -195,6 +187,7 @@
                                                         ? 'border-neutral-600 bg-neutral-700 text-purple-600 focus:ring-purple-500'
                                                         : 'border-gray-300 bg-white text-blue-600 focus:ring-blue-500',
                                                 ]"
+                                                v-model="form.remember"
                                             />
                                             <label
                                                 for="remember"
@@ -286,19 +279,23 @@
 
 <script setup>
 import { useForm } from "@inertiajs/vue3";
-import { computed } from "vue";
+import { ref, computed } from "vue";
+import { useTheme } from "@/composables/useTheme.js";
 import InputError from "@/Components/InputError.vue";
 import lightIcon from "@/icons/Logo/icon.png";
 import darkIcon from "@/icons/Logo/darkicon.png";
-import { useTheme } from "@/Components/useTheme.js";
 
-const { isDark, toggleTheme } = useTheme();
+const { isDark, gradients } = useTheme();
+
+// Computed gradient text class
+const gradientTextClass = computed(() => gradients.text.value);
 
 const iconSrc = computed(() => (isDark.value ? darkIcon : lightIcon));
 
 const form = useForm({
     email: "",
     password: "",
+    remember: false,
 });
 
 const submit = () => {

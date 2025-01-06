@@ -253,9 +253,9 @@ import InputError from "@/Components/InputError.vue";
 import lightIcon from "@/icons/Logo/icon.png";
 import darkIcon from "@/icons/Logo/darkicon.png";
 
-import { useTheme } from "@/Components/useTheme.js";
+import { useTheme } from "@/composables/useTheme";
 
-const { isDark, toggleTheme } = useTheme();
+const { isDark, gradients } = useTheme();
 const iconSrc = computed(() => (isDark.value ? darkIcon : lightIcon));
 
 const form = useForm({

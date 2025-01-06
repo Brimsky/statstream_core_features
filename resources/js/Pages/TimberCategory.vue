@@ -3,28 +3,17 @@
         <div class="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
             <!-- Hero Section -->
             <div class="text-center max-w-7xl mx-auto mb-12">
-                <h1
-                    class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-4"
-                >
-                    <span
-                        class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-teal-500 dark:from-purple-400 dark:to-blue-500"
-                    >
-                        Available Species
-                    </span>
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-4">
+                    <span :class="gradientTextClass">Available Species</span>
                 </h1>
-                <p
-                    class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto"
-                >
-                    Explore our comprehensive collection of timber species and
-                    analyze their market trends
+                <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                    Explore our comprehensive collection of timber species and analyze their market trends
                 </p>
             </div>
 
             <!-- Species Grid -->
             <div class="max-w-7xl mx-auto">
-                <div
-                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
-                >
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 grid-spacing">
                     <div
                         v-for="item in species"
                         :key="item.speacies"
@@ -120,71 +109,16 @@
 
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { defineProps } from "vue";
-import { Link } from "@inertiajs/vue3";
-import { useTheme } from "@/Components/useTheme.js";
+import { Head } from "@inertiajs/vue3";
+import { ref, computed } from "vue";
+import { useTheme } from "@/composables/useTheme";
 
-const { isDark, toggleTheme } = useTheme();
+const { isDark, gradients } = useTheme();
+
+// Computed gradient text class
+const gradientTextClass = computed(() => gradients.text.value);
 
 const props = defineProps({
     species: Array,
 });
 </script>
-
-<style scoped>
-/* Base styles */
-.text-gradient {
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-}
-
-/* Background pattern */
-.bg-pattern {
-    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z' fill='currentColor' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
-}
-
-/* Transitions */
-.transition-all {
-    transition-property: all;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 300ms;
-}
-
-/* Hover animations */
-.group:hover .group-hover\:translate-x-1 {
-    transform: translateX(0.25rem);
-}
-
-/* Font settings */
-h1,
-h2 {
-    font-family: "Inter", sans-serif;
-}
-
-/* Improve card shadows */
-.shadow-lg {
-    box-shadow:
-        0 10px 15px -3px rgba(0, 0, 0, 0.1),
-        0 4px 6px -2px rgba(0, 0, 0, 0.05);
-}
-
-.dark .shadow-lg {
-    box-shadow:
-        0 10px 15px -3px rgba(0, 0, 0, 0.2),
-        0 4px 6px -2px rgba(0, 0, 0, 0.1);
-}
-
-/* Grid spacing responsiveness */
-@screen md {
-    .gap-8 {
-        gap: 2rem;
-    }
-}
-
-@screen lg {
-    .gap-8 {
-        gap: 2.5rem;
-    }
-}
-</style>

@@ -25,6 +25,7 @@
         "echarts": "^5.5.0",
         "highcharts": "^11.4.1",
         "laravel-echo": "^1.16.1",
+        "pinia": "^2.3.0",
         "pusher-js": "^8.4.0-rc2",
         "vue-echarts": "^6.7.1",
         "vue-highcharts": "^0.2.0",

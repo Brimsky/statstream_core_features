@@ -2,32 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-    --bg-primary: #ffffff;
-    --text-primary: #000000;
-}
+@layer base {
+    :root {
+        --theme-transition-duration: 200ms;
+        --bg-primary: #ffffff;
+        --text-primary: #000000;
+    }
 
-:root.dark {
-    --bg-primary: #1f1f1f;
-    --text-primary: #ffffff;
-}
+    :root.dark {
+        --bg-primary: #1f1f1f;
+        --text-primary: #ffffff;
+    }
 
-body {
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
-    transition:
-        background-color 0.3s ease,
-        color 0.3s ease;
-}
+    /* Apply transitions to specific properties */
+    *, *::before, *::after {
+        @apply transition-colors duration-200 ease-in-out;
+    }
 
-* {
-    transition:
-        background-color 0.3s ease,
-        border-color 0.3s ease;
-}
+    /* Font settings */
+    h1, h2 {
+        @apply font-inter;
+    }
 
-body {
-    @apply bg-white dark:bg-neutral-900;
+    /* Prevent transition on page load */
+    .no-transitions * {
+        transition: none !important;
+    }
+
+    body {
+        @apply bg-white dark:bg-neutral-900;
+    }
 }
 
 @layer components {
@@ -44,8 +48,45 @@ body {
         @apply w-full text-white bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded focus:outline-none focus:ring  dark:bg-violet-600 dark:hover:bg-violet-800;
     }
 
-    /* Navbar */
+    /* Navigation link styles */
+    .nav-link {
+        @apply text-black dark:text-white hover:bg-neutral-100 dark:hover:bg-neutral-700 px-4 py-2 rounded-lg transition-colors duration-200;
+    }
+
+    /* Navbar button styles */
     .navbar-btn {
-        @apply dark:bg-stone-50 dark:text-black dark:font-bold font-bold dark:text-lg text-lg text-white py-1.5 px-4 rounded-xl justify-center dark:hover:bg-stone-400 dark:hover:shadow-lg bg-stone-900 hover:shadow-lg transition w-40 whitespace-nowrap text-center;
+        @apply text-black dark:text-white hover:bg-neutral-100 dark:hover:bg-neutral-700 px-4 py-2 rounded-lg transition-colors duration-200;
+    }
+
+    /* Card styles */
+    .timber-card {
+        @apply relative h-full bg-white dark:bg-neutral-800 rounded-xl shadow-lg dark:shadow-2xl overflow-hidden border border-gray-100 dark:border-neutral-700 p-6 transition-all duration-300;
+    }
+
+    .timber-card:hover {
+        @apply shadow-2xl -translate-y-1;
+    }
+
+    /* Background pattern */
+    .bg-pattern {
+        background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z' fill='currentColor' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+        @apply absolute inset-0 opacity-[0.03] dark:opacity-[0.05];
+    }
+}
+
+@layer utilities {
+    /* Grid spacing utilities */
+    .grid-spacing {
+        @apply gap-6 md:gap-8 lg:gap-8;
+    }
+
+    /* Shadow utilities */
+    .shadow-custom {
+        @apply shadow-lg dark:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.2),0_4px_6px_-2px_rgba(0,0,0,0.1)];
+    }
+
+    /* Text gradient utilities */
+    .text-gradient {
+        @apply bg-clip-text text-transparent;
     }
 }

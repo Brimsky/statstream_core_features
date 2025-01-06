@@ -4,6 +4,7 @@
             <div class="p-6 rounded-xl dark:bg-neutral-800 bg-white shadow-md">
                 <h4
                     class="text-xl font-semibold dark:text-white text-black mb-4"
+                    :class="gradientTextClass"
                 >
                     Saved Materials
                 </h4>
@@ -120,18 +121,28 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from "vue";
-import { usePage } from "@inertiajs/vue3";
-import { Inertia } from "@inertiajs/inertia";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import timberlog from "../icons/timber/logs.png";
-import { useTheme } from "@/Components/useTheme.js";
+import { Head } from "@inertiajs/vue3";
+import { ref, computed } from "vue";
+import { useTheme } from "@/composables/useTheme";
 
-const { isDark, toggleTheme } = useTheme();
+const { isDark, gradients } = useTheme();
 
-const logicon = computed(() => timberlog);
+// Computed gradient text class
+const gradientTextClass = computed(() => gradients.text.value);
 
-const { props } = usePage();
+const logicon = computed(() => require("../icons/timber/logs.png"));
+
+const props = defineProps({
+    auth: {
+        user: Object,
+    },
+    savedMaterials: {
+        type: Array,
+        default: () => [],
+    },
+});
+
 const savedMaterials = computed(() => props.savedMaterials ?? []);
 
 const sortCriterion = ref(props.sort || "species");
@@ -154,22 +165,22 @@ const sortedMaterials = computed(() => {
 });
 
 const sortMaterials = () => {
-    Inertia.visit(window.location.href.split("?")[0], {
-        method: "get",
-        data: { sort: sortCriterion.value },
-        preserveState: true,
-    });
+    // Inertia.visit(window.location.href.split("?")[0], {
+    //     method: "get",
+    //     data: { sort: sortCriterion.value },
+    //     preserveState: true,
+    // });
 };
 
 const deleteMaterial = (id) => {
     if (confirm("Are you sure you want to delete this material?")) {
-        Inertia.delete(`/saved-materials/${id}`, {
-            onSuccess: () => {
-                window.location.reload(); // Force a full-page reload
-            },
-        });
+        // Inertia.delete(`/saved-materials/${id}`, {
+        //     onSuccess: () => {
+        //         window.location.reload(); // Force a full-page reload
+        //     },
+        // });
     }
 };
 
-watch(sortCriterion, sortMaterials);
+// watch(sortCriterion, sortMaterials);
 </script>

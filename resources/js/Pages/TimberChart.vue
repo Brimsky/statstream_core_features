@@ -324,9 +324,9 @@ import * as echarts from "echarts";
 import { usePage } from "@inertiajs/vue3";
 import FilterSelect from "@/Components/FilterSelect.vue";
 import timberlog from "../icons/timber/logs.png";
-import { useTheme } from "@/Components/useTheme.js";
+import { useTheme } from "@/composables/useTheme";
 
-const { isDark, toggleTheme } = useTheme();
+const { isDark, gradients } = useTheme();
 
 const logicon = computed(() => timberlog);
 const { user } = usePage().props.auth;

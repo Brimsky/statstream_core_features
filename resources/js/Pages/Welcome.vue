@@ -1,7 +1,8 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
-import { computed, ref } from "vue";
-import { useTheme } from "@/Components/useTheme.js";
+import { ref, computed } from "vue";
+import { useTheme } from "@/composables/useTheme";
+
 import Start from "../Components/Home/About.vue";
 import Footer from "../Components/Footers/Footer.vue";
 
@@ -18,18 +19,17 @@ const props = defineProps({
     phpVersion: String,
 });
 
-// Use the theme manager with explicit handler
-const { isDark, toggleTheme } = useTheme();
+// Use theme composable
+const { isDark, toggleTheme, gradients } = useTheme();
+
 const open = ref(false);
 
 // Computed values for icons
 const mode = computed(() => (isDark.value ? darkmode : lightmode));
 const iconSrc = computed(() => (isDark.value ? darkIcon : lightIcon));
-const gradientTextClass = computed(() =>
-    isDark.value
-        ? "bg-gradient-to-r from-purple-400 via-pink-400 to-blue-500"
-        : "bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-500",
-);
+
+// Computed gradient text class
+const gradientTextClass = computed(() => gradients.text.value);
 
 // Explicit theme toggle handler
 const handleThemeToggle = () => {

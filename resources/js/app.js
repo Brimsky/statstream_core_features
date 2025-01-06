@@ -4,13 +4,25 @@ import { createApp, h } from "vue";
 import { createInertiaApp, Link as InertiaLink } from "@inertiajs/vue3";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy";
-import { useTheme } from "@/Components/useTheme";
+import { createPinia } from 'pinia';
 import * as echarts from "echarts";
 
-const appName = import.meta.env.VITE_APP_NAME || "Laravel";
+// Initialize theme from localStorage or system preference
+const initializeTheme = () => {
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+    }
+};
 
-// Initialize theme before app creation
-const { isDark } = useTheme();
+// Initialize theme immediately to prevent flash
+initializeTheme();
+
+const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
@@ -21,7 +33,11 @@ createInertiaApp({
         ),
     setup({ el, App, props, plugin }) {
         const app = createApp({ render: () => h(App, props) });
-
+        
+        // Initialize Pinia
+        const pinia = createPinia();
+        app.use(pinia);
+        
         app.component("InertiaLink", InertiaLink);
         app.component("Link", InertiaLink);
         app.use(plugin);
