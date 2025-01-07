@@ -1,5 +1,5 @@
 <template>
-    <AuthenticatedLayout>
+    <MainLayout>
         <div class="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
             <!-- Hero Section -->
             <div class="text-center max-w-7xl mx-auto mb-12">
@@ -104,21 +104,22 @@
                 </div>
             </div>
         </div>
-    </AuthenticatedLayout>
+    </MainLayout>
 </template>
 
 <script setup>
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import MainLayout from "@/Layouts/MainLayout.vue";
 import { Head } from "@inertiajs/vue3";
-import { ref, computed } from "vue";
-import { useTheme } from "@/composables/useTheme";
+import { computed } from "vue";
 
-const { isDark, gradients } = useTheme();
+defineProps({
+    species: {
+        type: Array,
+        required: true,
+    },
+});
 
-// Computed gradient text class
-const gradientTextClass = computed(() => gradients.text.value);
-
-const props = defineProps({
-    species: Array,
+const gradientTextClass = computed(() => {
+    return "bg-gradient-to-r from-blue-600 to-teal-500 dark:from-purple-400 dark:to-blue-500 bg-clip-text text-transparent";
 });
 </script>

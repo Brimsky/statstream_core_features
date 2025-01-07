@@ -1,13 +1,8 @@
 <template>
-    <AuthenticatedLayout>
-        <div
-            class="min-h-screen py-8 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-neutral-900"
-        >
-            <!-- Header Section -->
+    <MainLayout>
+        <div class="min-h-screen py-8 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-neutral-900">
             <div class="max-w-7xl mx-auto mb-8">
-                <h1
-                    class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-teal-500 dark:from-purple-400 dark:to-blue-500 bg-clip-text text-transparent"
-                >
+                <h1 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-teal-500 dark:from-purple-400 dark:to-blue-500 bg-clip-text text-transparent">
                     {{ species }} Analysis
                 </h1>
                 <p class="mt-2 text-gray-600 dark:text-gray-300">
@@ -15,46 +10,27 @@
                 </p>
             </div>
 
-            <!-- Main Content -->
             <div class="max-w-7xl mx-auto">
                 <!-- Flex container for chart and filters -->
                 <div class="flex flex-col lg:flex-row gap-6">
                     <!-- Chart Container -->
                     <div class="flex-grow">
-                        <div
-                            class="bg-white dark:bg-neutral-800 rounded-xl shadow-lg border border-gray-100 dark:border-neutral-700 overflow-hidden"
-                        >
-                            <div
-                                class="p-4 border-b border-gray-100 dark:border-neutral-700"
-                            >
-                                <h2
-                                    class="text-lg font-semibold text-gray-900 dark:text-white"
-                                >
+                        <div class="bg-white dark:bg-neutral-800 rounded-xl shadow-lg border border-gray-100 dark:border-neutral-700 overflow-hidden">
+                            <div class="p-4 border-b border-gray-100 dark:border-neutral-700">
+                                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
                                     Price Comparison
                                 </h2>
                             </div>
-                            <div
-                                ref="chartContainer"
-                                class="h-96 w-full p-4"
-                            ></div>
-                            <div
-                                ref="legendContainer"
-                                class="flex flex-wrap justify-center gap-4 p-4 border-t border-gray-100 dark:border-neutral-700"
-                            ></div>
+                            <div ref="chartContainer" class="h-96 w-full p-4"></div>
+                            <div ref="legendContainerRef" class="flex flex-wrap justify-center gap-4 p-4 border-t border-gray-100 dark:border-neutral-700"></div>
                         </div>
                     </div>
 
                     <!-- Filters Panel -->
                     <div class="lg:w-80">
-                        <div
-                            class="bg-white dark:bg-neutral-800 rounded-xl shadow-lg border border-gray-100 dark:border-neutral-700"
-                        >
-                            <div
-                                class="p-4 border-b border-gray-100 dark:border-neutral-700"
-                            >
-                                <h2
-                                    class="text-lg font-semibold text-gray-900 dark:text-white"
-                                >
+                        <div class="bg-white dark:bg-neutral-800 rounded-xl shadow-lg border border-gray-100 dark:border-neutral-700">
+                            <div class="p-4 border-b border-gray-100 dark:border-neutral-700">
+                                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
                                     Filters
                                 </h2>
                             </div>
@@ -72,196 +48,112 @@
                     </div>
                 </div>
 
-                <div v-if="user && user.vip_status" class="mt-8">
-                    <div
-                        class="bg-white dark:bg-neutral-800 rounded-xl shadow-lg border border-gray-100 dark:border-neutral-700 overflow-hidden"
-                    >
-                        <div
-                            class="p-4 border-b border-gray-100 dark:border-neutral-700"
-                        >
-                            <h2
-                                class="text-lg font-semibold text-gray-900 dark:text-white"
-                            >
+                <div class="mt-8">
+                    <div class="bg-white dark:bg-neutral-800 rounded-xl shadow-lg border border-gray-100 dark:border-neutral-700 overflow-hidden">
+                        <div class="p-4 border-b border-gray-100 dark:border-neutral-700">
+                            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
                                 Detailed Listings
                             </h2>
                         </div>
-                        <div
-                            class="divide-y divide-gray-100 dark:divide-neutral-700"
-                        >
-                            <div
-                                v-for="entry in filteredEntries"
-                                :key="entry.id"
-                                class="p-6 hover:bg-gray-50 dark:hover:bg-neutral-700/50 transition-colors duration-200"
-                            >
+                        <div class="divide-y divide-gray-100 dark:divide-neutral-700">
+                            <div v-for="entry in filteredEntries" :key="entry.id" class="p-6 hover:bg-gray-50 dark:hover:bg-neutral-700/50 transition-colors duration-200">
                                 <div class="flex flex-col md:flex-row gap-6">
                                     <!-- Company and Product Image Section -->
                                     <div class="flex items-start space-x-6">
-                                        <div
-                                            class="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0 bg-gradient-to-br from-blue-50 to-teal-50 dark:from-neutral-700 dark:to-neutral-600 p-2"
-                                        >
-                                            <img
-                                                :src="logicon"
-                                                alt="Timber log"
-                                                class="w-full h-full object-contain"
-                                            />
+                                        <div class="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0 bg-gradient-to-br from-blue-50 to-teal-50 dark:from-neutral-700 dark:to-neutral-600 p-2">
+                                            <img :src="logicon" alt="Timber log" class="w-full h-full object-contain" />
                                         </div>
                                         <div>
-                                            <h3
-                                                class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2"
-                                            >
-                                                <BuildingOffice2Icon
-                                                    class="w-6 h-6 text-blue-500 dark:text-purple-400"
-                                                />
+                                            <h3 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                                                <BuildingOffice2Icon class="w-6 h-6 text-blue-500 dark:text-purple-400" />
                                                 {{ entry.seller }}
                                             </h3>
-                                            <div
-                                                class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4"
-                                            >
+                                            <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                                                 <!-- Species -->
-                                                <div
-                                                    class="flex items-center space-x-2"
-                                                >
-                                                    <div
-                                                        class="p-2 rounded-lg bg-blue-50 dark:bg-neutral-700"
-                                                    >
-                                                        <TreeIcon
-                                                            class="w-5 h-5 text-blue-500 dark:text-purple-400"
-                                                        />
+                                                <div class="flex items-center space-x-2">
+                                                    <div class="p-2 rounded-lg bg-blue-50 dark:bg-neutral-700">
+                                                        <PuzzlePieceIcon class="w-5 h-5 text-blue-500 dark:text-purple-400" />
                                                     </div>
                                                     <div>
-                                                        <div
-                                                            class="text-sm text-gray-500 dark:text-gray-400"
-                                                        >
+                                                        <div class="text-sm text-gray-500 dark:text-gray-400">
                                                             Species
                                                         </div>
-                                                        <div
-                                                            class="font-medium text-gray-900 dark:text-white"
-                                                        >
+                                                        <div class="font-medium text-gray-900 dark:text-white">
                                                             {{ entry.speacies }}
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <!-- Class -->
-                                                <div
-                                                    class="flex items-center space-x-2"
-                                                >
-                                                    <div
-                                                        class="p-2 rounded-lg bg-blue-50 dark:bg-neutral-700"
-                                                    >
-                                                        <TagIcon
-                                                            class="w-5 h-5 text-blue-500 dark:text-purple-400"
-                                                        />
+                                                <div class="flex items-center space-x-2">
+                                                    <div class="p-2 rounded-lg bg-blue-50 dark:bg-neutral-700">
+                                                        <TagIcon class="w-5 h-5 text-blue-500 dark:text-purple-400" />
                                                     </div>
                                                     <div>
-                                                        <div
-                                                            class="text-sm text-gray-500 dark:text-gray-400"
-                                                        >
+                                                        <div class="text-sm text-gray-500 dark:text-gray-400">
                                                             Class
                                                         </div>
-                                                        <div
-                                                            class="font-medium text-gray-900 dark:text-white"
-                                                        >
+                                                        <div class="font-medium text-gray-900 dark:text-white">
                                                             {{ entry.class }}
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <!-- Type -->
-                                                <div
-                                                    class="flex items-center space-x-2"
-                                                >
-                                                    <div
-                                                        class="p-2 rounded-lg bg-blue-50 dark:bg-neutral-700"
-                                                    >
-                                                        <Squares2X2Icon
-                                                            class="w-5 h-5 text-blue-500 dark:text-purple-400"
-                                                        />
+                                                <div class="flex items-center space-x-2">
+                                                    <div class="p-2 rounded-lg bg-blue-50 dark:bg-neutral-700">
+                                                        <Squares2X2Icon class="w-5 h-5 text-blue-500 dark:text-purple-400" />
                                                     </div>
                                                     <div>
-                                                        <div
-                                                            class="text-sm text-gray-500 dark:text-gray-400"
-                                                        >
+                                                        <div class="text-sm text-gray-500 dark:text-gray-400">
                                                             Type
                                                         </div>
-                                                        <div
-                                                            class="font-medium text-gray-900 dark:text-white"
-                                                        >
+                                                        <div class="font-medium text-gray-900 dark:text-white">
                                                             {{ entry.type }}
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <!-- Diameter -->
-                                                <div
-                                                    class="flex items-center space-x-2"
-                                                >
-                                                    <div
-                                                        class="p-2 rounded-lg bg-blue-50 dark:bg-neutral-700"
-                                                    >
-                                                        <ArrowsPointingOutIcon
-                                                            class="w-5 h-5 text-blue-500 dark:text-purple-400"
-                                                        />
+                                                <div class="flex items-center space-x-2">
+                                                    <div class="p-2 rounded-lg bg-blue-50 dark:bg-neutral-700">
+                                                        <ArrowsPointingOutIcon class="w-5 h-5 text-blue-500 dark:text-purple-400" />
                                                     </div>
                                                     <div>
-                                                        <div
-                                                            class="text-sm text-gray-500 dark:text-gray-400"
-                                                        >
+                                                        <div class="text-sm text-gray-500 dark:text-gray-400">
                                                             Diameter
                                                         </div>
-                                                        <div
-                                                            class="font-medium text-gray-900 dark:text-white"
-                                                        >
+                                                        <div class="font-medium text-gray-900 dark:text-white">
                                                             {{ entry.diameter }}
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <!-- Length -->
-                                                <div
-                                                    class="flex items-center space-x-2"
-                                                >
-                                                    <div
-                                                        class="p-2 rounded-lg bg-blue-50 dark:bg-neutral-700"
-                                                    >
-                                                        <ArrowsRightLeftIcon
-                                                            class="w-5 h-5 text-blue-500 dark:text-purple-400"
-                                                        />
+                                                <div class="flex items-center space-x-2">
+                                                    <div class="p-2 rounded-lg bg-blue-50 dark:bg-neutral-700">
+                                                        <ArrowsRightLeftIcon class="w-5 h-5 text-blue-500 dark:text-purple-400" />
                                                     </div>
                                                     <div>
-                                                        <div
-                                                            class="text-sm text-gray-500 dark:text-gray-400"
-                                                        >
+                                                        <div class="text-sm text-gray-500 dark:text-gray-400">
                                                             Length
                                                         </div>
-                                                        <div
-                                                            class="font-medium text-gray-900 dark:text-white"
-                                                        >
+                                                        <div class="font-medium text-gray-900 dark:text-white">
                                                             {{ entry.length }}
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <!-- Location -->
-                                                <div
-                                                    class="flex items-center space-x-2"
-                                                >
-                                                    <div
-                                                        class="p-2 rounded-lg bg-blue-50 dark:bg-neutral-700"
-                                                    >
-                                                        <MapPinIcon
-                                                            class="w-5 h-5 text-blue-500 dark:text-purple-400"
-                                                        />
+                                                <div class="flex items-center space-x-2">
+                                                    <div class="p-2 rounded-lg bg-blue-50 dark:bg-neutral-700">
+                                                        <MapPinIcon class="w-5 h-5 text-blue-500 dark:text-purple-400" />
                                                     </div>
                                                     <div>
-                                                        <div
-                                                            class="text-sm text-gray-500 dark:text-gray-400"
-                                                        >
+                                                        <div class="text-sm text-gray-500 dark:text-gray-400">
                                                             Location
                                                         </div>
-                                                        <div
-                                                            class="font-medium text-gray-900 dark:text-white"
-                                                        >
+                                                        <div class="font-medium text-gray-900 dark:text-white">
                                                             {{ entry.location }}
                                                         </div>
                                                     </div>
@@ -271,39 +163,18 @@
                                     </div>
 
                                     <!-- Price and Actions -->
-                                    <div
-                                        class="flex-grow flex flex-col md:items-end justify-between"
-                                    >
+                                    <div class="flex-grow flex flex-col md:items-end justify-between">
                                         <div class="flex items-center gap-2">
-                                            <div
-                                                class="p-2 rounded-lg bg-blue-50 dark:bg-neutral-700"
-                                            >
-                                                <CurrencyDollarIcon
-                                                    class="w-6 h-6 text-blue-500 dark:text-purple-400"
-                                                />
+                                            <div class="p-2 rounded-lg bg-blue-50 dark:bg-neutral-700">
+                                                <CurrencyDollarIcon class="w-6 h-6 text-blue-500 dark:text-purple-400" />
                                             </div>
-                                            <div
-                                                class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-teal-500 dark:from-purple-400 dark:to-blue-500 bg-clip-text text-transparent"
-                                            >
-                                                ${{ entry.price }}
+                                            <div class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-teal-500 dark:from-purple-400 dark:to-blue-500 bg-clip-text text-transparent">
+                                                €{{ entry.price }}
                                             </div>
                                         </div>
                                         <div class="flex gap-3 mt-4">
-                                            <button
-                                                @click="saveMaterial(entry.id)"
-                                                class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-teal-500 dark:from-purple-500 dark:to-blue-600 text-white rounded-lg hover:opacity-90 transition-opacity duration-200"
-                                            >
-                                                <BookmarkIcon class="w-5 h-5" />
-                                                Save
-                                            </button>
-                                            <a
-                                                :href="entry.url"
-                                                target="_blank"
-                                                class="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-neutral-700 text-gray-900 dark:text-white rounded-lg hover:opacity-90 transition-opacity duration-200"
-                                            >
-                                                <ArrowTopRightOnSquareIcon
-                                                    class="w-5 h-5"
-                                                />
+                                            <a :href="entry.url" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-neutral-700 text-gray-900 dark:text-white rounded-lg hover:opacity-90 transition-opacity duration-200">
+                                                <ArrowTopRightOnSquareIcon class="w-5 h-5" />
                                                 Details
                                             </a>
                                         </div>
@@ -315,42 +186,45 @@
                 </div>
             </div>
         </div>
-    </AuthenticatedLayout>
+    </MainLayout>
 </template>
+
 <script setup>
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { defineProps, ref, computed, onMounted, watchEffect } from "vue";
+import MainLayout from "@/Layouts/MainLayout.vue";
+import { defineProps, ref, computed, onMounted, onUnmounted, watchEffect } from "vue";
 import * as echarts from "echarts";
-import { usePage } from "@inertiajs/vue3";
 import FilterSelect from "@/Components/FilterSelect.vue";
+import {
+    BuildingOffice2Icon,
+    PuzzlePieceIcon,
+    TagIcon,
+    Squares2X2Icon,
+    ArrowsPointingOutIcon,
+    ArrowsRightLeftIcon,
+    MapPinIcon,
+    CurrencyDollarIcon,
+    ArrowTopRightOnSquareIcon,
+} from "@heroicons/vue/24/outline";
 import timberlog from "../icons/timber/logs.png";
-import { useTheme } from "@/composables/useTheme";
-
-const { isDark, gradients } = useTheme();
-
-const logicon = computed(() => timberlog);
-const { user } = usePage().props.auth;
 
 const props = defineProps({
-    entries: Array,
-    species: String,
+    entries: {
+        type: Object,
+        required: true,
+        default: () => ({})
+    },
+    species: {
+        type: String,
+        required: true
+    }
 });
 
-// Initialize entries as an empty array if undefined
-const entries = ref(props.entries || []);
-if (!Array.isArray(entries.value)) {
-    entries.value = [];
-    console.error("Entries is not an array:", props.entries);
-}
-
 const chartContainer = ref(null);
-const legendContainer = ref(null);
-const filterSeller = ref("");
-const filterClass = ref("");
-const filterDiameter = ref("");
-const filterLength = ref("");
-const filterLocation = ref("");
-const filterType = ref("");
+const legendContainerRef = ref(null);
+
+const entriesArray = computed(() => {
+    return Object.values(props.entries || {});
+});
 
 // Ensure data is sorted in descending order
 function sortDescending(arr) {
@@ -362,64 +236,63 @@ function sortDescending(arr) {
     });
 }
 
-// Compute filtered entries based on multiple criteria
+const filterValues = ref({
+    seller: "",
+    type: "",
+    class: "",
+    diameter: "",
+    length: "",
+    location: ""
+});
 
 const uniqueSellers = computed(() => {
-    const sellers = new Set(entries.value.map((entry) => entry.seller));
+    const sellers = new Set(entriesArray.value.map((entry) => entry.seller));
     return sortDescending(Array.from(sellers));
 });
+
 const uniqueClass = computed(() => {
-    const classs = new Set(entries.value.map((entry) => entry.class));
+    const classs = new Set(entriesArray.value.map((entry) => entry.class));
     return sortDescending(Array.from(classs));
 });
 
 const uniqueDiameter = computed(() => {
-    const diameters = new Set(entries.value.map((entry) => entry.diameter));
+    const diameters = new Set(entriesArray.value.map((entry) => entry.diameter));
     return sortDescending(Array.from(diameters));
 });
 
 const uniqueLength = computed(() => {
-    const lengths = new Set(entries.value.map((entry) => entry.length));
+    const lengths = new Set(entriesArray.value.map((entry) => entry.length));
     return sortDescending(Array.from(lengths));
 });
 
 const uniqueLocation = computed(() => {
-    const locations = new Set(entries.value.map((entry) => entry.location));
+    const locations = new Set(entriesArray.value.map((entry) => entry.location));
     return sortDescending(Array.from(locations));
 });
 
 const uniqueType = computed(() => {
-    const types = new Set(entries.value.map((entry) => entry.type));
+    const types = new Set(entriesArray.value.map((entry) => entry.type));
     return sortDescending(Array.from(types));
 });
 
-const saveMaterial = async (timberSpeciesId) => {
-    const csrfToken = document
-        .querySelector('meta[name="csrf-token"]')
-        .getAttribute("content");
-
-    try {
-        const response = await fetch("/api/save-material", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": csrfToken,
-            },
-            body: JSON.stringify({ liked_material: timberSpeciesId }),
-        });
-
-        if (!response.ok) {
-            throw new Error(
-                `Failed to save timber, status: ${response.status}`,
-            );
-        }
-
-        const data = await response.json();
-        console.log("Save successful:", data);
-    } catch (error) {
-        console.error("Error saving timber:", error);
-    }
-};
+// Compute filtered entries based on multiple criteria
+const filteredEntries = computed(() => {
+    return entriesArray.value.filter(
+        (entry) =>
+            (!filterValues.value.seller ||
+                entry.seller === filterValues.value.seller) &&
+            (!filterValues.value.type ||
+                entry.type === filterValues.value.type) &&
+            (!filterValues.value.class ||
+                entry.class === filterValues.value.class) &&
+            (!filterValues.value.diameter ||
+                entry.diameter == filterValues.value.diameter) &&
+            (!filterValues.value.length ||
+                entry.length == filterValues.value.length) &&
+            (!filterValues.value.location ||
+                entry.location === filterValues.value.location)
+    );
+});
 
 watchEffect(() => {
     updateChart();
@@ -431,7 +304,7 @@ onMounted(() => {
 
 function updateChart() {
     const container = chartContainer.value;
-    const legendContainerElement = legendContainer.value;
+    const legendContainerElement = legendContainerRef.value;
     if (!container || !legendContainerElement) {
         console.error("Chart container or legend container not found");
         return;
@@ -559,37 +432,11 @@ const filters = computed(() => [
     },
 ]);
 
-const filterValues = ref({
-    seller: "",
-    type: "",
-    class: "",
-    diameter: "",
-    length: "",
-    location: "",
+onUnmounted(() => {
+    if (chart) {
+        chart.dispose();
+    }
 });
 
-// Update filteredEntries computed to use filterValues
-const filteredEntries = computed(() => {
-    return entries.value
-        .filter(
-            (entry) =>
-                (!filterValues.value.seller ||
-                    entry.seller
-                        .toLowerCase()
-                        .includes(filterValues.value.seller.toLowerCase())) &&
-                (!filterValues.value.type ||
-                    entry.type === filterValues.value.type) &&
-                (!filterValues.value.class ||
-                    entry.class === filterValues.value.class) &&
-                (!filterValues.value.diameter ||
-                    entry.diameter == filterValues.value.diameter) &&
-                (!filterValues.value.length ||
-                    entry.length == filterValues.value.length) &&
-                (!filterValues.value.location ||
-                    entry.location
-                        .toLowerCase()
-                        .includes(filterValues.value.location.toLowerCase())),
-        )
-        .sort((a, b) => b.seller.localeCompare(a.seller));
-});
+const logicon = computed(() => timberlog);
 </script>
