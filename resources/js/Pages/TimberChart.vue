@@ -22,17 +22,24 @@
                                 </h2>
                             </div>
                             <div ref="chartContainer" class="h-96 w-full p-4"></div>
-                            <div ref="legendContainerRef" class="flex flex-wrap justify-center gap-4 p-4 border-t border-gray-100 dark:border-neutral-700"></div>
+                            <div ref="legendContainer" class="flex flex-wrap justify-center gap-4 p-4 border-t border-gray-100 dark:border-neutral-700"></div>
                         </div>
                     </div>
 
                     <!-- Filters Panel -->
                     <div class="lg:w-80">
                         <div class="bg-white dark:bg-neutral-800 rounded-xl shadow-lg border border-gray-100 dark:border-neutral-700">
-                            <div class="p-4 border-b border-gray-100 dark:border-neutral-700">
+                            <div class="p-4 border-b border-gray-100 dark:border-neutral-700 flex justify-between items-center">
                                 <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
                                     Filters
                                 </h2>
+                                <button 
+                                    @click="clearFilters"
+                                    class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-neutral-700 hover:bg-gray-50 dark:hover:bg-neutral-600 rounded-lg border border-gray-200 dark:border-neutral-600 transition-colors duration-200"
+                                >
+                                    <XCircleIcon class="w-4 h-4 mr-1.5" />
+                                    Clear Filters
+                                </button>
                             </div>
                             <div class="p-4 space-y-4">
                                 <FilterSelect
@@ -79,7 +86,7 @@
                                                             Species
                                                         </div>
                                                         <div class="font-medium text-gray-900 dark:text-white">
-                                                            {{ entry.speacies }}
+                                                            {{ entry.species }}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -204,6 +211,7 @@ import {
     MapPinIcon,
     CurrencyDollarIcon,
     ArrowTopRightOnSquareIcon,
+    XCircleIcon,
 } from "@heroicons/vue/24/outline";
 import timberlog from "../icons/timber/logs.png";
 
@@ -220,11 +228,33 @@ const props = defineProps({
 });
 
 const chartContainer = ref(null);
-const legendContainerRef = ref(null);
-
-const entriesArray = computed(() => {
-    return Object.values(props.entries || {});
+const legendContainer = ref(null);
+const filterValues = ref({
+    seller: "",
+    type: "",
+    class: "",
+    diameter: "",
+    length: "",
+    location: "",
 });
+
+const clearFilters = () => {
+    filterValues.value = {
+        seller: "",
+        type: "",
+        class: "",
+        diameter: "",
+        length: "",
+        location: "",
+    };
+};
+
+// Initialize entries as an empty array if undefined
+const entries = ref(props.entries || []);
+if (!Array.isArray(entries.value)) {
+    entries.value = [];
+    console.error("Entries is not an array:", props.entries);
+}
 
 // Ensure data is sorted in descending order
 function sortDescending(arr) {
@@ -236,62 +266,76 @@ function sortDescending(arr) {
     });
 }
 
-const filterValues = ref({
-    seller: "",
-    type: "",
-    class: "",
-    diameter: "",
-    length: "",
-    location: ""
+// Compute filtered entries based on multiple criteria
+const filteredEntries = computed(() => {
+    return entries.value
+        .filter(
+            (entry) =>
+                (!filterValues.value.seller ||
+                    entry.seller
+                        .toLowerCase()
+                        .includes(filterValues.value.seller.toLowerCase())) &&
+                (!filterValues.value.type ||
+                    entry.type === filterValues.value.type) &&
+                (!filterValues.value.class ||
+                    entry.class === filterValues.value.class) &&
+                (!filterValues.value.diameter ||
+                    entry.diameter == filterValues.value.diameter) &&
+                (!filterValues.value.length ||
+                    entry.length == filterValues.value.length) &&
+                (!filterValues.value.location ||
+                    entry.location
+                        .toLowerCase()
+                        .includes(filterValues.value.location.toLowerCase())),
+        )
+        .sort((a, b) => b.seller.localeCompare(a.seller));
 });
 
+const filters = computed(() => [
+    { key: "seller", label: "Filter by Seller", options: uniqueSellers.value },
+    { key: "type", label: "Filter by Type", options: uniqueTypes.value },
+    { key: "class", label: "Filter by Class", options: uniqueClasses.value },
+    {
+        key: "diameter",
+        label: "Filter by Diameter",
+        options: uniqueDiameters.value,
+    },
+    { key: "length", label: "Filter by Length", options: uniqueLengths.value },
+    {
+        key: "location",
+        label: "Filter by Location",
+        options: uniqueLocations.value,
+    },
+]);
+
 const uniqueSellers = computed(() => {
-    const sellers = new Set(entriesArray.value.map((entry) => entry.seller));
+    const sellers = new Set(entries.value.map((entry) => entry.seller));
     return sortDescending(Array.from(sellers));
 });
 
-const uniqueClass = computed(() => {
-    const classs = new Set(entriesArray.value.map((entry) => entry.class));
-    return sortDescending(Array.from(classs));
-});
-
-const uniqueDiameter = computed(() => {
-    const diameters = new Set(entriesArray.value.map((entry) => entry.diameter));
-    return sortDescending(Array.from(diameters));
-});
-
-const uniqueLength = computed(() => {
-    const lengths = new Set(entriesArray.value.map((entry) => entry.length));
-    return sortDescending(Array.from(lengths));
-});
-
-const uniqueLocation = computed(() => {
-    const locations = new Set(entriesArray.value.map((entry) => entry.location));
-    return sortDescending(Array.from(locations));
-});
-
-const uniqueType = computed(() => {
-    const types = new Set(entriesArray.value.map((entry) => entry.type));
+const uniqueTypes = computed(() => {
+    const types = new Set(entries.value.map((entry) => entry.type));
     return sortDescending(Array.from(types));
 });
 
-// Compute filtered entries based on multiple criteria
-const filteredEntries = computed(() => {
-    return entriesArray.value.filter(
-        (entry) =>
-            (!filterValues.value.seller ||
-                entry.seller === filterValues.value.seller) &&
-            (!filterValues.value.type ||
-                entry.type === filterValues.value.type) &&
-            (!filterValues.value.class ||
-                entry.class === filterValues.value.class) &&
-            (!filterValues.value.diameter ||
-                entry.diameter == filterValues.value.diameter) &&
-            (!filterValues.value.length ||
-                entry.length == filterValues.value.length) &&
-            (!filterValues.value.location ||
-                entry.location === filterValues.value.location)
-    );
+const uniqueClasses = computed(() => {
+    const classes = new Set(entries.value.map((entry) => entry.class));
+    return sortDescending(Array.from(classes));
+});
+
+const uniqueDiameters = computed(() => {
+    const diameters = new Set(entries.value.map((entry) => entry.diameter));
+    return sortDescending(Array.from(diameters));
+});
+
+const uniqueLengths = computed(() => {
+    const lengths = new Set(entries.value.map((entry) => entry.length));
+    return sortDescending(Array.from(lengths));
+});
+
+const uniqueLocations = computed(() => {
+    const locations = new Set(entries.value.map((entry) => entry.location));
+    return sortDescending(Array.from(locations));
 });
 
 watchEffect(() => {
@@ -303,12 +347,13 @@ onMounted(() => {
 });
 
 function updateChart() {
-    const container = chartContainer.value;
-    const legendContainerElement = legendContainerRef.value;
-    if (!container || !legendContainerElement) {
+    if (!chartContainer.value || !legendContainer.value) {
         console.error("Chart container or legend container not found");
         return;
     }
+
+    const container = chartContainer.value;
+    const legendContainerElement = legendContainer.value;
 
     // Clear the existing legend
     while (legendContainerElement.firstChild) {
@@ -317,94 +362,175 @@ function updateChart() {
 
     const chart = echarts.init(container);
 
-    const filteredData = filteredEntries.value;
-    const xAxisData = filteredData.map((entry) => entry.seller);
-    const yAxisData = filteredData.map((entry) => ({
-        price: entry.price,
-        class: entry.class,
-        location: entry.location,
-        length: entry.length,
-        speacies: entry.speacies,
-        diameter: entry.diameter,
-        type: entry.type,
-    }));
-
+    // Get all entries and assign seller colors
+    const data = filteredEntries.value;
+    const uniqueSellers = [...new Set(data.map(entry => entry.seller))];
+    
+    // Fixed colors for sellers
+    const colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'];
     const sellerColors = {};
-    filteredData.forEach((entry) => {
-        if (!sellerColors[entry.seller]) {
-            sellerColors[entry.seller] = echarts.color.random();
+    uniqueSellers.forEach((seller, index) => {
+        sellerColors[seller] = colors[index % colors.length];
+    });
+
+    // Group data by seller
+    const groupedData = {};
+    data.forEach(entry => {
+        if (!groupedData[entry.seller]) {
+            groupedData[entry.seller] = [];
         }
+        groupedData[entry.seller].push(entry);
+    });
+
+    // Create series data
+    const seriesData = [];
+    let barIndex = 0;
+    const xAxisLabels = [];
+    const sellerPositions = {};
+
+    Object.entries(groupedData).forEach(([seller, entries]) => {
+        // Store the middle position for this seller's group
+        sellerPositions[seller] = barIndex + entries.length / 2 - 0.5;
+        
+        entries.forEach(entry => {
+            xAxisLabels.push('');  // Empty label for each bar
+            seriesData.push({
+                value: parseFloat(entry.price) || 0,
+                itemStyle: {
+                    color: sellerColors[seller]
+                },
+                entry: entry
+            });
+            barIndex++;
+        });
     });
 
     chart.setOption({
         tooltip: {
-            trigger: "axis",
+            trigger: 'axis',
             axisPointer: {
-                type: "shadow",
+                type: 'shadow'
             },
-            formatter: function (params) {
-                const dataIndex = params[0].dataIndex;
-                const tooltipContent = [
-                    "Speacies: " + yAxisData[dataIndex].speacies,
-                    "Length: " + yAxisData[dataIndex].length,
-                    "Class: " + yAxisData[dataIndex].class,
-                    "Diameter: " + yAxisData[dataIndex].diameter,
-                    "Type: " + yAxisData[dataIndex].type,
-                    "Location: " + yAxisData[dataIndex].location,
-                    "Price: " + params[0].value,
-                ];
-                return tooltipContent.join("<br>");
-            },
+            formatter: function(params) {
+                const entry = params[0].data.entry;
+                return `
+                    <div style="margin-bottom: 10px;">
+                        <strong>${entry.seller}</strong>
+                    </div>
+                    <div style="margin-bottom: 10px; padding-bottom: 10px;">
+                        <div><strong>Price:</strong> €${entry.price}</div>
+                        <div><strong>Class:</strong> ${entry.class || 'N/A'}</div>
+                        <div><strong>Type:</strong> ${entry.type || 'N/A'}</div>
+                        <div><strong>Diameter:</strong> ${entry.diameter || 'N/A'}</div>
+                        <div><strong>Length:</strong> ${entry.length || 'N/A'}</div>
+                        <div><strong>Location:</strong> ${entry.location || 'N/A'}</div>
+                    </div>
+                `;
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '15%',
+            containLabel: true
         },
         xAxis: {
-            type: "category",
-            data: xAxisData,
+            type: 'category',
+            data: xAxisLabels,
             axisLabel: {
-                color: getCurrentTextColor(),
+                interval: 0,
+                rotate: 45,
+                color: getCurrentTextColor()
             },
+            axisTick: {
+                show: false
+            },
+            axisLine: {
+                show: true
+            }
         },
         yAxis: {
-            type: "value",
+            type: 'value',
+            name: 'Price (€)',
             axisLabel: {
                 color: getCurrentTextColor(),
-            },
+                formatter: '{value} €'
+            }
         },
-        series: [
-            {
-                name: "Price",
-                type: "bar",
-                data: yAxisData.map((item, index) => ({
-                    value: item.price,
-                    itemStyle: { color: sellerColors[xAxisData[index]] },
-                })),
-            },
-        ],
+        series: [{
+            name: 'Price',
+            type: 'bar',
+            data: seriesData,
+            barWidth: '40%',
+            emphasis: {
+                itemStyle: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }]
     });
 
-    // Add legend manually below the chart
+    // Add seller labels
+    Object.entries(sellerPositions).forEach(([seller, position]) => {
+        chart.setOption({
+            graphic: [{
+                type: 'text',
+                left: chart.convertToPixel({xAxis: 0}, position),
+                top: chart.getHeight() - 40,
+                style: {
+                    text: seller,
+                    textAlign: 'center',
+                    fill: getCurrentTextColor(),
+                    fontSize: 12
+                },
+                rotation: 0.25 * Math.PI  // 45 degrees
+            }]
+        });
+    });
+
+    // Add legend for sellers
     Object.entries(sellerColors).forEach(([seller, color]) => {
-        const legendItem = document.createElement("div");
-        legendItem.style.display = "flex";
-        legendItem.style.alignItems = "center";
-        legendItem.style.margin = "0 10px";
-
-        const colorBox = document.createElement("span");
-        colorBox.style.display = "inline-block";
-        colorBox.style.width = "12px";
-        colorBox.style.height = "12px";
+        const legendItem = document.createElement('div');
+        legendItem.className = 'flex items-center space-x-2 px-2 py-1';
+        
+        const colorBox = document.createElement('span');
+        colorBox.className = 'w-3 h-3 inline-block';
         colorBox.style.backgroundColor = color;
-        colorBox.style.marginRight = "5px";
-
-        const sellerName = document.createElement("span");
-        sellerName.textContent = seller;
-        sellerName.style.color = getCurrentTextColor();
-
+        
+        const text = document.createElement('span');
+        text.textContent = seller;
+        text.className = 'text-sm';
+        text.style.color = getCurrentTextColor();
+        
         legendItem.appendChild(colorBox);
-        legendItem.appendChild(sellerName);
-
+        legendItem.appendChild(text);
         legendContainerElement.appendChild(legendItem);
     });
+
+    // Handle resize
+    window.addEventListener('resize', () => {
+        chart.resize();
+    });
+
+    return () => {
+        chart.dispose();
+        window.removeEventListener('resize', () => {
+            chart.resize();
+        });
+    };
 }
+
+onUnmounted(() => {
+    const container = chartContainer.value;
+    if (container) {
+        const chart = echarts.getInstanceByDom(container);
+        if (chart) {
+            chart.dispose();
+        }
+    }
+});
 
 function getCurrentTextColor() {
     const body = document.body;
@@ -414,29 +540,6 @@ function getCurrentTextColor() {
         return "black";
     }
 }
-
-const filters = computed(() => [
-    { key: "seller", label: "Filter by Seller", options: uniqueSellers.value },
-    { key: "type", label: "Filter by Type", options: uniqueType.value },
-    { key: "class", label: "Filter by Class", options: uniqueClass.value },
-    {
-        key: "diameter",
-        label: "Filter by Diameter",
-        options: uniqueDiameter.value,
-    },
-    { key: "length", label: "Filter by Length", options: uniqueLength.value },
-    {
-        key: "location",
-        label: "Filter by Location",
-        options: uniqueLocation.value,
-    },
-]);
-
-onUnmounted(() => {
-    if (chart) {
-        chart.dispose();
-    }
-});
 
 const logicon = computed(() => timberlog);
 </script>
