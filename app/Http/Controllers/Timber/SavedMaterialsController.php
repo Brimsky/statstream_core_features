@@ -14,16 +14,13 @@ class SavedMaterialsController extends Controller
 {
     public function index()
     {
-        // Fetch saved materials
         $savedMaterials = FollowedTimber::with('timberSpecies')
             ->where('user_id', Auth::id())
             ->get();
 
-        // Map through saved materials to calculate price changes
         $materialsWithPriceChange = $savedMaterials->map(function ($savedMaterial) {
             $timberSpecies = $savedMaterial->timberSpecies;
 
-            // Fetch the latest price data for the same species
             $latestTimberSpecies = TimberSpecies::where('speacies', $timberSpecies->speacies)
                 ->where('class', $timberSpecies->class)
                 ->where('diameter', $timberSpecies->diameter)

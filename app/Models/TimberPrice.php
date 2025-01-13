@@ -25,65 +25,55 @@ class TimberPrice extends Model
         'price' => 'float',
     ];
 
-    /**
-     * Scope a query to filter by seller
-     */
+    
+    public function scopeLatestFirst(Builder $query): Builder
+    {
+        return $query->orderBy('date', 'desc');
+    }
+
+    
     public function scopeBySeller(Builder $query, string $seller): Builder
     {
         return $query->where('seller', $seller);
     }
 
-    /**
-     * Scope a query to filter by species
-     */
+    
     public function scopeBySpecies(Builder $query, string $species): Builder
     {
         return $query->where('species', $species);
     }
 
-    /**
-     * Scope a query to filter by date range
-     */
+    
     public function scopeByDateRange(Builder $query, string $startDate, string $endDate): Builder
     {
         return $query->whereBetween('date', [$startDate, $endDate]);
     }
 
-    /**
-     * Scope a query to filter by location
-     */
+    
     public function scopeByLocation(Builder $query, string $location): Builder
     {
         return $query->where('location', $location);
     }
 
-    /**
-     * Get unique sellers
-     */
+    
     public static function getUniqueSellers()
     {
         return self::distinct()->pluck('seller');
     }
 
-    /**
-     * Get unique species
-     */
+  
     public static function getUniqueSpecies()
     {
         return self::distinct()->pluck('species');
     }
 
-    /**
-     * Get unique locations
-     */
+    
     public static function getUniqueLocations()
     {
         return self::distinct()->pluck('location');
     }
 
-    /**
-     * Get average price by species
-     */
+   
     public static function getAveragePriceBySpecies()
     {
         return self::selectRaw('species, AVG(price) as average_price')
@@ -91,9 +81,7 @@ class TimberPrice extends Model
             ->get();
     }
 
-    /**
-     * Get price trends by date
-     */
+   
     public static function getPriceTrendsByDate(string $species = null)
     {
         $query = self::selectRaw('date, AVG(price) as average_price')

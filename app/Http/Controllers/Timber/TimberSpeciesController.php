@@ -10,14 +10,17 @@ class TimberSpeciesController extends Controller
 {
     public function index()
     {
-        $species = TimberPrice::select('species')
+        $latestDate = TimberPrice::max('date');
+
+        $species = TimberPrice::where('date', $latestDate)
+            ->select('species')
             ->selectRaw('COUNT(DISTINCT seller) as seller_count')
             ->selectRaw('COUNT(*) as listing_count')
             ->selectRaw('AVG(price) as average_price')
             ->selectRaw('MIN(price) as min_price')
             ->selectRaw('MAX(price) as max_price')
             ->groupBy('species')
-            ->orderBy('species')
+            ->orderBy('species')  
             ->get()
             ->map(function ($item) {
                 return [
@@ -30,36 +33,34 @@ class TimberSpeciesController extends Controller
                 ];
             });
 
-        return Inertia::render('TimberCategory', ['species' => $species]);
+        return Inertia::render('TimberCategory', [
+            'species' => $species,
+            'lastUpdate' => $latestDate
+        ]);
     }
 
     public function show($species)
     {
-        $entries = TimberPrice::select('id', 'species', 'class', 'diameter', 'length', 'location', 'type', 'price', 'seller', 'date')
-            ->where('species', $species)
-            ->orderBy('date', 'desc')
+        $entries = TimberPrice::where('species', $species)
+            ->latestFirst()
             ->get();
 
-        // Get unique entries for the main table
         $uniqueEntries = $entries->unique(function ($item) {
             return $item['class'] . '-' . $item['diameter'] . '-' . $item['length'] . '-' . $item['location'] . '-' . $item['type'];
         });
 
-        // Get price trends
         $priceTrends = TimberPrice::where('species', $species)
             ->selectRaw('DATE(date) as date, AVG(price) as average_price')
             ->groupBy('date')
             ->orderBy('date')
             ->get();
 
-        // Get location-based statistics
         $locationStats = TimberPrice::where('species', $species)
             ->selectRaw('location, AVG(price) as average_price, COUNT(*) as listing_count')
             ->groupBy('location')
             ->orderBy('average_price', 'desc')
             ->get();
 
-        // Get seller statistics
         $sellerStats = TimberPrice::where('species', $species)
             ->selectRaw('seller, COUNT(*) as listing_count, AVG(price) as average_price')
             ->groupBy('seller')
@@ -79,7 +80,6 @@ class TimberSpeciesController extends Controller
     {
         $query = TimberPrice::query();
 
-        // Apply filters
         if ($request->has('species')) {
             $query->where('species', $request->species);
         }

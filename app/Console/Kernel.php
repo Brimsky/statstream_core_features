@@ -12,7 +12,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        // Run Python scrapers at 6 AM
+        $schedule->exec('bash ' . base_path('Scraping/run.sh'))
+                ->dailyAt('06:00')
+                ->appendOutputTo(storage_path('logs/scrapers.log'));
     }
 
     /**

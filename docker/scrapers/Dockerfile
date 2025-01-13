@@ -16,4 +16,5 @@ RUN pip install mysqlclient SQLAlchemy python-dotenv
 COPY Scraping/ .
 COPY .env .
 
-CMD ["python", "run_scrapers.py"]
+# Run in scheduler mode by default (no "run" argument)
+CMD ["python", "run_scrapers.py", "scheduler"]
