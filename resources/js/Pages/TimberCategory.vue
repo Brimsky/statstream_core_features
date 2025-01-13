@@ -2,86 +2,118 @@
     <MainLayout>
         <div class="min-h-screen py-8 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-neutral-900">
             <div class="max-w-7xl mx-auto">
-                <h1 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-teal-500 dark:from-purple-400 dark:to-blue-500 bg-clip-text text-transparent mb-8">
-                    Timber Species Overview
-                </h1>
-
-                <!-- Species Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <h1 class="text-3xl font-bold mb-8">Timber Species</h1>
+                
+                <div class="species-grid">
                     <Link
                         v-for="item in species"
                         :key="item.name"
-                        :href="route('timber.show', { species: item.name })"
-                        class="bg-white dark:bg-neutral-800 rounded-xl shadow-lg border border-gray-100 dark:border-neutral-700 hover:shadow-xl transition-shadow duration-200 cursor-pointer"
+                        :href="route('timber.show', item.name)"
+                        class="species-card"
                     >
-                        <div class="p-6">
-                            <!-- Species Name -->
-                            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                                {{ item.name }}
-                            </h2>
-
-                            <!-- Stats Grid -->
-                            <div class="grid grid-cols-2 gap-4">
-                                <!-- Sellers -->
-                                <div class="bg-gray-50 dark:bg-neutral-700/50 rounded-lg p-4">
-                                    <div class="text-sm text-gray-500 dark:text-gray-400">
-                                        Sellers
-                                    </div>
-                                    <div class="mt-1 text-2xl font-semibold text-gray-900 dark:text-white">
-                                        {{ item.seller_count }}
-                                    </div>
-                                </div>
-
-                                <!-- Listings -->
-                                <div class="bg-gray-50 dark:bg-neutral-700/50 rounded-lg p-4">
-                                    <div class="text-sm text-gray-500 dark:text-gray-400">
-                                        Listings
-                                    </div>
-                                    <div class="mt-1 text-2xl font-semibold text-gray-900 dark:text-white">
-                                        {{ item.listing_count }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Price Range -->
-                            <div class="mt-4">
-                                <div class="text-sm text-gray-500 dark:text-gray-400">
-                                    Price Range
-                                </div>
-                                <div class="mt-1 flex items-baseline space-x-2">
-                                    <span class="text-2xl font-semibold text-gray-900 dark:text-white">
-                                        €{{ item.average_price }}
-                                    </span>
-                                    <span class="text-sm text-gray-500 dark:text-gray-400">
-                                        avg (€{{ item.min_price }} - €{{ item.max_price }})
-                                    </span>
-                                </div>
-                            </div>
-
-                            <!-- View Details Button -->
-                            <div class="mt-6">
-                                <div class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 dark:text-purple-400 bg-blue-50 dark:bg-neutral-700/50 rounded-lg hover:bg-blue-100 dark:hover:bg-neutral-600/50 transition-colors duration-200">
-                                    View Details
-                                    <ChevronRightIcon class="w-5 h-5 ml-2" />
-                                </div>
-                            </div>
+                        <div class="icon-container">
+                            <img :src="getSpeciesIcon(item.name)" :alt="item.name" />
                         </div>
+                        <h2 class="species-name">
+                            {{ item.name }}
+                        </h2>
                     </Link>
                 </div>
+
+                <!-- Debug output -->
+                <!-- <pre class="mt-8 p-4 bg-gray-100 dark:bg-neutral-800 rounded-lg overflow-auto">
+                    {{ species }}
+                </pre> -->
             </div>
         </div>
     </MainLayout>
 </template>
 
 <script setup>
-import { Link } from '@inertiajs/vue3';
-import MainLayout from '@/Layouts/MainLayout.vue';
-import { ChevronRightIcon } from '@heroicons/vue/24/outline';
+import MainLayout from "@/Layouts/MainLayout.vue";
+import { Link } from "@inertiajs/vue3";
+import { defineProps } from "vue";
+import birch from "@/icons/timber/birch.png";
+import pine from "@/icons/timber/pine.png";
+import spruce from "@/icons/timber/spruce.png";
+import aspen from "@/icons/timber/aspen.png";
+import oak from "@/icons/timber/oak.png";
+import ash from "@/icons/timber/ash.png";
+import alder from "@/icons/timber/alder.png";
+import maple from "@/icons/timber/maple.png";
+import logs from "@/icons/timber/logs.png";
 
-defineProps({
+const props = defineProps({
     species: {
         type: Array,
         required: true
     }
 });
+
+function getSpeciesIcon(speciesName) {
+    const iconMap = {
+        'Bērzs': birch,
+        'Priede': pine,
+        'Egle': spruce,
+        'Apse': aspen,
+        'Ozols': oak,
+        'Osis': ash,
+        'Alksnis': alder,
+        'Kļava': maple
+    };
+    
+    return iconMap[speciesName] || logs;
+}
 </script>
+
+<style scoped>
+.species-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
+}
+
+.species-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.species-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.icon-container {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.species-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+/* Dark mode */
+:root.dark .species-card {
+    background: #1f2937;
+}
+
+:root.dark .species-name {
+    color: white;
+}
+</style>
