@@ -22,24 +22,26 @@
                                 </h2>
                             </div>
                             <div ref="chartContainer" class="h-96 w-full p-4"></div>
-                            <div ref="legendContainer" class="flex flex-wrap justify-center gap-4 p-4 border-t border-gray-100 dark:border-neutral-700"></div>
+                            <div ref="legendContainerRef" class="flex flex-wrap justify-center gap-4 p-4 border-t border-gray-100 dark:border-neutral-700"></div>
                         </div>
                     </div>
 
                     <!-- Filters Panel -->
                     <div class="lg:w-80">
                         <div class="bg-white dark:bg-neutral-800 rounded-xl shadow-lg border border-gray-100 dark:border-neutral-700">
-                            <div class="p-4 border-b border-gray-100 dark:border-neutral-700 flex justify-between items-center">
-                                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                    Filters
-                                </h2>
-                                <button 
-                                    @click="clearFilters"
-                                    class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-neutral-700 hover:bg-gray-50 dark:hover:bg-neutral-600 rounded-lg border border-gray-200 dark:border-neutral-600 transition-colors duration-200"
-                                >
-                                    <XCircleIcon class="w-4 h-4 mr-1.5" />
-                                    Clear Filters
-                                </button>
+                            <div class="p-4 border-b border-gray-100 dark:border-neutral-700">
+                                <div class="flex justify-between items-center">
+                                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                        Filters
+                                    </h2>
+                                    <button
+                                        @click="clearFilters"
+                                        class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-neutral-700 hover:bg-gray-50 dark:hover:bg-neutral-600 rounded-lg border border-gray-200 dark:border-neutral-600 transition-colors duration-200"
+                                    >
+                                        <XCircleIcon class="w-4 h-4 mr-1.5" />
+                                        Clear Filters
+                                    </button>
+                                </div>
                             </div>
                             <div class="p-4 space-y-4">
                                 <FilterSelect
@@ -86,7 +88,7 @@
                                                             Species
                                                         </div>
                                                         <div class="font-medium text-gray-900 dark:text-white">
-                                                            {{ entry.species }}
+                                                            {{ entry.speacies }}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -211,7 +213,7 @@ import {
     MapPinIcon,
     CurrencyDollarIcon,
     ArrowTopRightOnSquareIcon,
-    XCircleIcon,
+    XCircleIcon
 } from "@heroicons/vue/24/outline";
 import timberlog from "../icons/timber/logs.png";
 
@@ -228,33 +230,11 @@ const props = defineProps({
 });
 
 const chartContainer = ref(null);
-const legendContainer = ref(null);
-const filterValues = ref({
-    seller: "",
-    type: "",
-    class: "",
-    diameter: "",
-    length: "",
-    location: "",
+const legendContainerRef = ref(null);
+
+const entriesArray = computed(() => {
+    return Object.values(props.entries || {});
 });
-
-const clearFilters = () => {
-    filterValues.value = {
-        seller: "",
-        type: "",
-        class: "",
-        diameter: "",
-        length: "",
-        location: "",
-    };
-};
-
-// Initialize entries as an empty array if undefined
-const entries = ref(props.entries || []);
-if (!Array.isArray(entries.value)) {
-    entries.value = [];
-    console.error("Entries is not an array:", props.entries);
-}
 
 // Ensure data is sorted in descending order
 function sortDescending(arr) {
@@ -266,77 +246,65 @@ function sortDescending(arr) {
     });
 }
 
-// Compute filtered entries based on multiple criteria
-const filteredEntries = computed(() => {
-    return entries.value
-        .filter(
-            (entry) =>
-                (!filterValues.value.seller ||
-                    entry.seller
-                        .toLowerCase()
-                        .includes(filterValues.value.seller.toLowerCase())) &&
-                (!filterValues.value.type ||
-                    entry.type === filterValues.value.type) &&
-                (!filterValues.value.class ||
-                    entry.class === filterValues.value.class) &&
-                (!filterValues.value.diameter ||
-                    entry.diameter == filterValues.value.diameter) &&
-                (!filterValues.value.length ||
-                    entry.length == filterValues.value.length) &&
-                (!filterValues.value.location ||
-                    entry.location
-                        .toLowerCase()
-                        .includes(filterValues.value.location.toLowerCase())),
-        )
-        .sort((a, b) => b.seller.localeCompare(a.seller));
+const filterValues = ref({
+    seller: "",
+    type: "",
+    class: "",
+    diameter: "",
+    length: "",
+    location: ""
 });
 
-const filters = computed(() => [
-    { key: "seller", label: "Filter by Seller", options: uniqueSellers.value },
-    { key: "type", label: "Filter by Type", options: uniqueTypes.value },
-    { key: "class", label: "Filter by Class", options: uniqueClasses.value },
-    {
-        key: "diameter",
-        label: "Filter by Diameter",
-        options: uniqueDiameters.value,
-    },
-    { key: "length", label: "Filter by Length", options: uniqueLengths.value },
-    {
-        key: "location",
-        label: "Filter by Location",
-        options: uniqueLocations.value,
-    },
-]);
-
 const uniqueSellers = computed(() => {
-    const sellers = new Set(entries.value.map((entry) => entry.seller));
+    const sellers = new Set(entriesArray.value.map((entry) => entry.seller));
     return sortDescending(Array.from(sellers));
 });
 
-const uniqueTypes = computed(() => {
-    const types = new Set(entries.value.map((entry) => entry.type));
-    return sortDescending(Array.from(types));
+const uniqueClass = computed(() => {
+    const classs = new Set(entriesArray.value.map((entry) => entry.class));
+    return sortDescending(Array.from(classs));
 });
 
-const uniqueClasses = computed(() => {
-    const classes = new Set(entries.value.map((entry) => entry.class));
-    return sortDescending(Array.from(classes));
-});
-
-const uniqueDiameters = computed(() => {
-    const diameters = new Set(entries.value.map((entry) => entry.diameter));
+const uniqueDiameter = computed(() => {
+    const diameters = new Set(entriesArray.value.map((entry) => entry.diameter));
     return sortDescending(Array.from(diameters));
 });
 
-const uniqueLengths = computed(() => {
-    const lengths = new Set(entries.value.map((entry) => entry.length));
+const uniqueLength = computed(() => {
+    const lengths = new Set(entriesArray.value.map((entry) => entry.length));
     return sortDescending(Array.from(lengths));
 });
 
-const uniqueLocations = computed(() => {
-    const locations = new Set(entries.value.map((entry) => entry.location));
+const uniqueLocation = computed(() => {
+    const locations = new Set(entriesArray.value.map((entry) => entry.location));
     return sortDescending(Array.from(locations));
 });
+
+const uniqueType = computed(() => {
+    const types = new Set(entriesArray.value.map((entry) => entry.type));
+    return sortDescending(Array.from(types));
+});
+
+// Compute filtered entries based on multiple criteria
+const filteredEntries = computed(() => {
+    return entriesArray.value.filter(
+        (entry) =>
+            (!filterValues.value.seller ||
+                entry.seller === filterValues.value.seller) &&
+            (!filterValues.value.type ||
+                entry.type === filterValues.value.type) &&
+            (!filterValues.value.class ||
+                entry.class === filterValues.value.class) &&
+            (!filterValues.value.diameter ||
+                entry.diameter == filterValues.value.diameter) &&
+            (!filterValues.value.length ||
+                entry.length == filterValues.value.length) &&
+            (!filterValues.value.location ||
+                entry.location === filterValues.value.location)
+    );
+});
+
+let chart = null;
 
 watchEffect(() => {
     updateChart();
@@ -347,72 +315,53 @@ onMounted(() => {
 });
 
 function updateChart() {
-    if (!chartContainer.value || !legendContainer.value) {
+    const container = chartContainer.value;
+    const legendContainerElement = legendContainerRef.value;
+    if (!container || !legendContainerElement) {
         console.error("Chart container or legend container not found");
         return;
     }
 
-    const container = chartContainer.value;
-    const legendContainerElement = legendContainer.value;
+    // Initialize chart if not exists
+    if (!chart) {
+        chart = echarts.init(container);
+    }
 
     // Clear the existing legend
     while (legendContainerElement.firstChild) {
         legendContainerElement.removeChild(legendContainerElement.firstChild);
     }
 
-    const chart = echarts.init(container);
-
-    // Get all entries and assign seller colors
-    const data = filteredEntries.value;
-    const uniqueSellers = [...new Set(data.map(entry => entry.seller))];
+    const filteredData = filteredEntries.value;
     
-    // Fixed colors for sellers
-    const colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'];
+    // Define a fixed color palette
+    const colorPalette = [
+        '#3b82f6', // blue
+        '#ef4444', // red
+        '#10b981', // green
+        '#f59e0b', // amber
+        '#8b5cf6', // purple
+        '#ec4899', // pink
+        '#14b8a6', // teal
+        '#f97316', // orange
+        '#6366f1', // indigo
+        '#84cc16'  // lime
+    ];
+
+    // Create seller color mapping
     const sellerColors = {};
-    uniqueSellers.forEach((seller, index) => {
-        sellerColors[seller] = colors[index % colors.length];
-    });
-
-    // Group data by seller
-    const groupedData = {};
-    data.forEach(entry => {
-        if (!groupedData[entry.seller]) {
-            groupedData[entry.seller] = [];
-        }
-        groupedData[entry.seller].push(entry);
-    });
-
-    // Create series data
-    const seriesData = [];
-    let barIndex = 0;
-    const xAxisLabels = [];
-    const sellerPositions = {};
-
-    Object.entries(groupedData).forEach(([seller, entries]) => {
-        // Store the middle position for this seller's group
-        sellerPositions[seller] = barIndex + entries.length / 2 - 0.5;
-        
-        entries.forEach(entry => {
-            xAxisLabels.push('');  // Empty label for each bar
-            seriesData.push({
-                value: parseFloat(entry.price) || 0,
-                itemStyle: {
-                    color: sellerColors[seller]
-                },
-                entry: entry
-            });
-            barIndex++;
-        });
+    uniqueSellers.value.forEach((seller, index) => {
+        sellerColors[seller] = colorPalette[index % colorPalette.length];
     });
 
     chart.setOption({
         tooltip: {
-            trigger: 'axis',
+            trigger: "axis",
             axisPointer: {
-                type: 'shadow'
+                type: "shadow",
             },
-            formatter: function(params) {
-                const entry = params[0].data.entry;
+            formatter: function (params) {
+                const entry = filteredData[params[0].dataIndex];
                 return `
                     <div style="margin-bottom: 10px;">
                         <strong>${entry.seller}</strong>
@@ -426,109 +375,97 @@ function updateChart() {
                         <div><strong>Location:</strong> ${entry.location || 'N/A'}</div>
                     </div>
                 `;
-            }
+            },
         },
         grid: {
             left: '3%',
             right: '4%',
-            bottom: '15%',
+            bottom: '5%', // Reduced bottom margin since we don't have x-axis labels
             containLabel: true
         },
         xAxis: {
-            type: 'category',
-            data: xAxisLabels,
+            type: "category",
+            data: filteredData.map((_, index) => index + 1), // Just numbers instead of seller names
             axisLabel: {
-                interval: 0,
-                rotate: 45,
-                color: getCurrentTextColor()
+                show: false // Hide x-axis labels completely
             },
             axisTick: {
-                show: false
-            },
-            axisLine: {
-                show: true
+                show: false // Hide axis ticks
             }
         },
         yAxis: {
-            type: 'value',
+            type: "value",
             name: 'Price (€)',
             axisLabel: {
                 color: getCurrentTextColor(),
                 formatter: '{value} €'
             }
         },
-        series: [{
-            name: 'Price',
-            type: 'bar',
-            data: seriesData,
-            barWidth: '40%',
-            emphasis: {
-                itemStyle: {
-                    shadowBlur: 10,
-                    shadowOffsetX: 0,
-                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+        series: [
+            {
+                name: "Price",
+                type: "bar",
+                barWidth: '40%',
+                data: filteredData.map(entry => ({
+                    value: entry.price,
+                    itemStyle: { 
+                        color: sellerColors[entry.seller]
+                    }
+                })),
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
                 }
             }
-        }]
+        ]
     });
 
-    // Add seller labels
-    Object.entries(sellerPositions).forEach(([seller, position]) => {
-        chart.setOption({
-            graphic: [{
-                type: 'text',
-                left: chart.convertToPixel({xAxis: 0}, position),
-                top: chart.getHeight() - 40,
-                style: {
-                    text: seller,
-                    textAlign: 'center',
-                    fill: getCurrentTextColor(),
-                    fontSize: 12
-                },
-                rotation: 0.25 * Math.PI  // 45 degrees
-            }]
-        });
-    });
-
-    // Add legend for sellers
+    // Create custom legend
     Object.entries(sellerColors).forEach(([seller, color]) => {
-        const legendItem = document.createElement('div');
-        legendItem.className = 'flex items-center space-x-2 px-2 py-1';
-        
-        const colorBox = document.createElement('span');
-        colorBox.className = 'w-3 h-3 inline-block';
+        const legendItem = document.createElement("div");
+        legendItem.style.display = "flex";
+        legendItem.style.alignItems = "center";
+        legendItem.style.margin = "0 10px";
+        legendItem.style.padding = "8px";
+        legendItem.style.borderRadius = "6px";
+        legendItem.style.cursor = "pointer";
+        legendItem.style.transition = "background-color 0.2s";
+
+        const colorBox = document.createElement("span");
+        colorBox.style.display = "inline-block";
+        colorBox.style.width = "12px";
+        colorBox.style.height = "12px";
         colorBox.style.backgroundColor = color;
-        
-        const text = document.createElement('span');
-        text.textContent = seller;
-        text.className = 'text-sm';
-        text.style.color = getCurrentTextColor();
-        
+        colorBox.style.marginRight = "8px";
+        colorBox.style.borderRadius = "3px";
+
+        const sellerName = document.createElement("span");
+        sellerName.textContent = seller;
+        sellerName.style.color = getCurrentTextColor();
+        sellerName.style.fontSize = "14px";
+
         legendItem.appendChild(colorBox);
-        legendItem.appendChild(text);
+        legendItem.appendChild(sellerName);
+
+        // Hover effect
+        legendItem.addEventListener('mouseenter', () => {
+            legendItem.style.backgroundColor = 'rgba(0, 0, 0, 0.05)';
+        });
+        legendItem.addEventListener('mouseleave', () => {
+            legendItem.style.backgroundColor = 'transparent';
+        });
+
         legendContainerElement.appendChild(legendItem);
     });
-
-    // Handle resize
-    window.addEventListener('resize', () => {
-        chart.resize();
-    });
-
-    return () => {
-        chart.dispose();
-        window.removeEventListener('resize', () => {
-            chart.resize();
-        });
-    };
 }
 
-onUnmounted(() => {
-    const container = chartContainer.value;
-    if (container) {
-        const chart = echarts.getInstanceByDom(container);
-        if (chart) {
-            chart.dispose();
-        }
+// Handle window resize
+window.addEventListener('resize', () => {
+    if (chart) {
+        chart.resize();
     }
 });
 
@@ -540,6 +477,35 @@ function getCurrentTextColor() {
         return "black";
     }
 }
+
+const filters = computed(() => [
+    { key: "seller", label: "Filter by Seller", options: uniqueSellers.value },
+    { key: "type", label: "Filter by Type", options: uniqueType.value },
+    { key: "class", label: "Filter by Class", options: uniqueClass.value },
+    {
+        key: "diameter",
+        label: "Filter by Diameter",
+        options: uniqueDiameter.value,
+    },
+    { key: "length", label: "Filter by Length", options: uniqueLength.value },
+    {
+        key: "location",
+        label: "Filter by Location",
+        options: uniqueLocation.value,
+    },
+]);
+
+function clearFilters() {
+    Object.keys(filterValues.value).forEach(key => {
+        filterValues.value[key] = '';
+    });
+}
+
+onUnmounted(() => {
+    if (chart) {
+        chart.dispose();
+    }
+});
 
 const logicon = computed(() => timberlog);
 </script>

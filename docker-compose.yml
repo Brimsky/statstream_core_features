@@ -54,13 +54,26 @@ services:
     networks:
       - sail
     healthcheck:
-      test:
-        - CMD
-        - mysqladmin
-        - ping
-        - "-p${DB_PASSWORD}"
+      test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
       retries: 3
       timeout: 5s
+  scrapers:
+    build:
+      context: .
+      dockerfile: docker/scrapers/Dockerfile
+    networks:
+      - sail
+    depends_on:
+      - mysql
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+    restart: unless-stopped
+
 networks:
   sail:
     driver: bridge
