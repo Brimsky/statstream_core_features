@@ -1,0 +1,15 @@
+[Unit]
+Description=Timber Scraper Service
+After=network.target
+
+[Service]
+Type=simple
+User=janisstrazdins
+WorkingDirectory=/Users/janisstrazdins/Desktop/StatStream core/Scraping
+Environment=PYTHONPATH=/Users/janisstrazdins/Desktop/StatStream core/Scraping
+ExecStart=/Users/janisstrazdins/Desktop/StatStream core/Scraping/venv/bin/python run_scrapers.py
+Restart=always
+RestartSec=60
+
+[Install]
+WantedBy=multi-user.target
