@@ -12,7 +12,7 @@ export PKG_CONFIG_PATH="/opt/homebrew/opt/mysql-client/lib/pkgconfig"
 source "$DIR/venv/bin/activate"
 
 # Install required packages if they're not already installed
-pip install schedule requests sqlalchemy beautifulsoup4 selenium webdriver_manager mysqlclient
+pip install schedule requests sqlalchemy beautifulsoup4 selenium webdriver_manager mysqlclient schedule
 
 # Run the scrapers
 python "$DIR/run_scrapers.py" run
