@@ -17,6 +17,7 @@ class TimberPrice extends Model
         'diameter',
         'location',
         'price',
+        'url',
     ];
 
     protected $casts = [

@@ -43,11 +43,23 @@ class TimberSpeciesController extends Controller
     {
         $entries = TimberPrice::where('species', $species)
             ->latestFirst()
+            ->orderBy('seller') 
             ->get();
 
         $uniqueEntries = $entries->unique(function ($item) {
-            return $item['class'] . '-' . $item['diameter'] . '-' . $item['length'] . '-' . $item['location'] . '-' . $item['type'];
-        });
+            return $item['class'] . '-' . $item['diameter'] . '-' . $item['length'] . '-' . $item['location'] . '-' . $item['type'] . '-' . $item['seller'];
+        })->map(function ($item) {
+            $sellerUrls = [
+                'Stiga' => 'https://stigarm.lv/lv/finierklucu-iepirksana/',
+                'Siardn' => 'https://siardn.lv/berza-iepirksana-koklaukumos/',
+                'Finieris' => 'https://www.finieris.com/lv/meza-ipasniekiem/finierklucu-iepirksana/',
+                'AmberBirch' => 'https://amberbirch.lv/apalkoku-iepirksana/',
+                'Bono' => 'https://www.bonotimber.com/pakalpojumi/apalkoka-tirdznieciba'
+            ];
+
+            $item['url'] = $sellerUrls[$item['seller']] ?? '#';
+            return $item;
+        })->sortBy('seller');
 
         $priceTrends = TimberPrice::where('species', $species)
             ->selectRaw('DATE(date) as date, AVG(price) as average_price')
@@ -56,15 +68,16 @@ class TimberSpeciesController extends Controller
             ->get();
 
         $locationStats = TimberPrice::where('species', $species)
-            ->selectRaw('location, AVG(price) as average_price, COUNT(*) as listing_count')
-            ->groupBy('location')
+            ->selectRaw('location, seller, AVG(price) as average_price, COUNT(*) as listing_count')
+            ->groupBy('location', 'seller')
+            ->orderBy('seller')
             ->orderBy('average_price', 'desc')
             ->get();
 
         $sellerStats = TimberPrice::where('species', $species)
             ->selectRaw('seller, COUNT(*) as listing_count, AVG(price) as average_price')
             ->groupBy('seller')
-            ->orderBy('listing_count', 'desc')
+            ->orderBy('seller')
             ->get();
 
         return Inertia::render('TimberChart', [

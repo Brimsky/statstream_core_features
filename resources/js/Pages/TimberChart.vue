@@ -52,6 +52,34 @@
                                     :options="filter.options"
                                     class="w-full"
                                 />
+                                <div class="mb-6">
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                                        Diameter Range (cm)
+                                    </label>
+                                    <div class="flex gap-4 items-center max-w-xs">
+                                        <div class="flex-1">
+                                            <input
+                                                type="number"
+                                                v-model.number="diameterRange.min"
+                                                placeholder="Min"
+                                                min="0"
+                                                step="1"
+                                                class="block w-full px-3 py-2 text-base border-gray-300 dark:border-neutral-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md dark:bg-neutral-800 dark:text-white"
+                                            />
+                                        </div>
+                                        <span class="text-gray-500 dark:text-gray-400">to</span>
+                                        <div class="flex-1">
+                                            <input
+                                                type="number"
+                                                v-model.number="diameterRange.max"
+                                                placeholder="Max"
+                                                min="0"
+                                                step="1"
+                                                class="block w-full px-3 py-2 text-base border-gray-300 dark:border-neutral-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md dark:bg-neutral-800 dark:text-white"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -88,7 +116,7 @@
                                                             Species
                                                         </div>
                                                         <div class="font-medium text-gray-900 dark:text-white">
-                                                            {{ entry.speacies }}
+                                                            {{ entry.species }}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -178,12 +206,17 @@
                                                 <CurrencyDollarIcon class="w-6 h-6 text-blue-500 dark:text-purple-400" />
                                             </div>
                                             <div class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-teal-500 dark:from-purple-400 dark:to-blue-500 bg-clip-text text-transparent">
-                                                €{{ entry.price }}
+                                                {{ entry.price }} €/m³
                                             </div>
                                         </div>
-                                        <div class="flex gap-3 mt-4">
-                                            <a :href="entry.url" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-neutral-700 text-gray-900 dark:text-white rounded-lg hover:opacity-90 transition-opacity duration-200">
-                                                <ArrowTopRightOnSquareIcon class="w-5 h-5" />
+                                        <div class="flex gap-2">
+                                            <a
+                                                :href="entry.url"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 dark:bg-purple-500 hover:bg-blue-700 dark:hover:bg-purple-600 rounded-lg transition-colors duration-200"
+                                            >
+                                                <ArrowTopRightOnSquareIcon class="w-5 h-5 mr-1.5" />
                                                 Details
                                             </a>
                                         </div>
@@ -255,6 +288,11 @@ const filterValues = ref({
     location: ""
 });
 
+const diameterRange = ref({
+    min: null,
+    max: null
+});
+
 const uniqueSellers = computed(() => {
     const sellers = new Set(entriesArray.value.map((entry) => entry.seller));
     return sortDescending(Array.from(sellers));
@@ -287,7 +325,20 @@ const uniqueType = computed(() => {
 
 // Compute filtered entries based on multiple criteria
 const filteredEntries = computed(() => {
-    return entriesArray.value.filter(
+    let filtered = entriesArray.value;
+
+    // Apply diameter range filter if either min or max is set
+    if (diameterRange.value.min !== null || diameterRange.value.max !== null) {
+        filtered = filtered.filter(entry => {
+            const diameter = parseFloat(entry.diameter);
+            const minOk = diameterRange.value.min === null || diameter >= diameterRange.value.min;
+            const maxOk = diameterRange.value.max === null || diameter <= diameterRange.value.max;
+            return minOk && maxOk;
+        });
+    }
+
+    // Apply other filters except diameter
+    filtered = filtered.filter(
         (entry) =>
             (!filterValues.value.seller ||
                 entry.seller === filterValues.value.seller) &&
@@ -295,14 +346,41 @@ const filteredEntries = computed(() => {
                 entry.type === filterValues.value.type) &&
             (!filterValues.value.class ||
                 entry.class === filterValues.value.class) &&
-            (!filterValues.value.diameter ||
-                entry.diameter == filterValues.value.diameter) &&
             (!filterValues.value.length ||
                 entry.length == filterValues.value.length) &&
             (!filterValues.value.location ||
                 entry.location === filterValues.value.location)
     );
+
+    return filtered;
 });
+
+// Remove the diameter filter from the regular filters
+const filters = computed(() => {
+    return [
+        { key: "seller", label: "Filter by Seller", options: uniqueSellers.value },
+        { key: "type", label: "Filter by Type", options: uniqueType.value },
+        { key: "class", label: "Filter by Class", options: uniqueClass.value },
+        {
+            key: "length",
+            label: "Filter by Length",
+            options: uniqueLength.value,
+        },
+        {
+            key: "location",
+            label: "Filter by Location",
+            options: uniqueLocation.value,
+        },
+    ];
+});
+
+function clearFilters() {
+    Object.keys(filterValues.value).forEach(key => {
+        filterValues.value[key] = '';
+    });
+    diameterRange.value.min = null;
+    diameterRange.value.max = null;
+}
 
 let chart = null;
 
@@ -476,29 +554,6 @@ function getCurrentTextColor() {
     } else {
         return "black";
     }
-}
-
-const filters = computed(() => [
-    { key: "seller", label: "Filter by Seller", options: uniqueSellers.value },
-    { key: "type", label: "Filter by Type", options: uniqueType.value },
-    { key: "class", label: "Filter by Class", options: uniqueClass.value },
-    {
-        key: "diameter",
-        label: "Filter by Diameter",
-        options: uniqueDiameter.value,
-    },
-    { key: "length", label: "Filter by Length", options: uniqueLength.value },
-    {
-        key: "location",
-        label: "Filter by Location",
-        options: uniqueLocation.value,
-    },
-]);
-
-function clearFilters() {
-    Object.keys(filterValues.value).forEach(key => {
-        filterValues.value[key] = '';
-    });
 }
 
 onUnmounted(() => {

@@ -8,7 +8,7 @@
                     <Link
                         v-for="item in species"
                         :key="item.name"
-                        :href="route('timber.show', item.name)"
+                        :href="route('timber.show', { species: item.name })"
                         class="species-card"
                     >
                         <div class="icon-container">
