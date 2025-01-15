@@ -2,7 +2,20 @@
     <MainLayout>
         <div class="min-h-screen py-8 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-neutral-900">
             <div class="max-w-7xl mx-auto">
-                <h1 class="text-3xl font-bold mb-8">Timber Species</h1>
+                <div class="flex justify-between items-center mb-8">
+                    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Koku sugas</h1>
+                    <button
+                        @click="toggleTheme"
+                        class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                        :class="isDark 
+                            ? 'bg-neutral-700 text-gray-200 hover:bg-neutral-600' 
+                            : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'"
+                    >
+                        <SunIcon v-if="isDark" class="w-5 h-5 mr-2" />
+                        <MoonIcon v-else class="w-5 h-5 mr-2" />
+                        {{ isDark ? 'Gaišais režīms' : 'Tumšais režīms' }}
+                    </button>
+                </div>
                 
                 <div class="species-grid">
                     <Link
@@ -32,7 +45,8 @@
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
 import { Link } from "@inertiajs/vue3";
-import { defineProps } from "vue";
+import { defineProps, ref, onMounted } from "vue";
+import { SunIcon, MoonIcon } from "@heroicons/vue/24/outline";
 import birch from "@/icons/timber/birch.png";
 import pine from "@/icons/timber/pine.png";
 import spruce from "@/icons/timber/spruce.png";
@@ -42,6 +56,23 @@ import ash from "@/icons/timber/ash.png";
 import alder from "@/icons/timber/alder.png";
 import maple from "@/icons/timber/maple.png";
 import logs from "@/icons/timber/logs.png";
+
+const isDark = ref(document.documentElement.classList.contains('dark'));
+
+const toggleTheme = () => {
+    isDark.value = !isDark.value;
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', isDark.value ? 'dark' : 'light');
+};
+
+// Initialize theme from localStorage on mount
+onMounted(() => {
+    const theme = localStorage.getItem('theme');
+    if (theme) {
+        isDark.value = theme === 'dark';
+        document.documentElement.classList.toggle('dark', isDark.value);
+    }
+});
 
 const props = defineProps({
     species: {

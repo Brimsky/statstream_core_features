@@ -2,12 +2,27 @@
     <MainLayout>
         <div class="min-h-screen py-8 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-neutral-900">
             <div class="max-w-7xl mx-auto mb-8">
-                <h1 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-teal-500 dark:from-purple-400 dark:to-blue-500 bg-clip-text text-transparent">
-                    {{ species }} Analysis
-                </h1>
-                <p class="mt-2 text-gray-600 dark:text-gray-300">
-                    Detailed market analysis and price comparison
-                </p>
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900 dark:text-white bg-clip-text">
+                            {{ species }}
+                        </h1>
+                        <p class="mt-2 text-gray-600 dark:text-gray-300">
+                            Detalizēta tirgus analīze un cenu salīdzinājums
+                        </p>
+                    </div>
+                    <button
+                        @click="toggleTheme"
+                        class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                        :class="isDark 
+                            ? 'bg-neutral-700 text-gray-200 hover:bg-neutral-600' 
+                            : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'"
+                    >
+                        <SunIcon v-if="isDark" class="w-5 h-5 mr-2" />
+                        <MoonIcon v-else class="w-5 h-5 mr-2" />
+                        {{ isDark ? 'Gaišais režīms' : 'Tumšais režīms' }}
+                    </button>
+                </div>
             </div>
 
             <div class="max-w-7xl mx-auto">
@@ -18,7 +33,7 @@
                         <div class="bg-white dark:bg-neutral-800 rounded-xl shadow-lg border border-gray-100 dark:border-neutral-700 overflow-hidden">
                             <div class="p-4 border-b border-gray-100 dark:border-neutral-700">
                                 <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                    Price Comparison
+                                    Cenu salīdzinājums
                                 </h2>
                             </div>
                             <div ref="chartContainer" class="h-96 w-full p-4"></div>
@@ -32,14 +47,14 @@
                             <div class="p-4 border-b border-gray-100 dark:border-neutral-700">
                                 <div class="flex justify-between items-center">
                                     <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                        Filters
+                                        Filtri
                                     </h2>
                                     <button
                                         @click="clearFilters"
                                         class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-neutral-700 hover:bg-gray-50 dark:hover:bg-neutral-600 rounded-lg border border-gray-200 dark:border-neutral-600 transition-colors duration-200"
                                     >
                                         <XCircleIcon class="w-4 h-4 mr-1.5" />
-                                        Clear Filters
+                                        Notīrīt filtri
                                     </button>
                                 </div>
                             </div>
@@ -54,7 +69,7 @@
                                 />
                                 <div class="mb-6">
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                                        Diameter Range (cm)
+                                        Diametra diapazons (cm)
                                     </label>
                                     <div class="flex gap-4 items-center max-w-xs">
                                         <div class="flex-1">
@@ -67,12 +82,12 @@
                                                 class="block w-full px-3 py-2 text-base border-gray-300 dark:border-neutral-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md dark:bg-neutral-800 dark:text-white"
                                             />
                                         </div>
-                                        <span class="text-gray-500 dark:text-gray-400">to</span>
+                                        <span class="text-gray-500 dark:text-gray-400">līdz</span>
                                         <div class="flex-1">
                                             <input
                                                 type="number"
                                                 v-model.number="diameterRange.max"
-                                                placeholder="Max"
+                                                placeholder="Maks"
                                                 min="0"
                                                 step="1"
                                                 class="block w-full px-3 py-2 text-base border-gray-300 dark:border-neutral-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md dark:bg-neutral-800 dark:text-white"
@@ -89,7 +104,7 @@
                     <div class="bg-white dark:bg-neutral-800 rounded-xl shadow-lg border border-gray-100 dark:border-neutral-700 overflow-hidden">
                         <div class="p-4 border-b border-gray-100 dark:border-neutral-700">
                             <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                Detailed Listings
+                                Detalizēti piedāvājumi
                             </h2>
                         </div>
                         <div class="divide-y divide-gray-100 dark:divide-neutral-700">
@@ -113,7 +128,7 @@
                                                     </div>
                                                     <div>
                                                         <div class="text-sm text-gray-500 dark:text-gray-400">
-                                                            Species
+                                                            Suga
                                                         </div>
                                                         <div class="font-medium text-gray-900 dark:text-white">
                                                             {{ entry.species }}
@@ -128,7 +143,7 @@
                                                     </div>
                                                     <div>
                                                         <div class="text-sm text-gray-500 dark:text-gray-400">
-                                                            Class
+                                                            Klase
                                                         </div>
                                                         <div class="font-medium text-gray-900 dark:text-white">
                                                             {{ entry.class }}
@@ -143,7 +158,7 @@
                                                     </div>
                                                     <div>
                                                         <div class="text-sm text-gray-500 dark:text-gray-400">
-                                                            Type
+                                                            Tips
                                                         </div>
                                                         <div class="font-medium text-gray-900 dark:text-white">
                                                             {{ entry.type }}
@@ -158,7 +173,7 @@
                                                     </div>
                                                     <div>
                                                         <div class="text-sm text-gray-500 dark:text-gray-400">
-                                                            Diameter
+                                                            Diametrs
                                                         </div>
                                                         <div class="font-medium text-gray-900 dark:text-white">
                                                             {{ entry.diameter }}
@@ -173,7 +188,7 @@
                                                     </div>
                                                     <div>
                                                         <div class="text-sm text-gray-500 dark:text-gray-400">
-                                                            Length
+                                                            Garums
                                                         </div>
                                                         <div class="font-medium text-gray-900 dark:text-white">
                                                             {{ entry.length }}
@@ -188,7 +203,7 @@
                                                     </div>
                                                     <div>
                                                         <div class="text-sm text-gray-500 dark:text-gray-400">
-                                                            Location
+                                                            Atrašanās vieta
                                                         </div>
                                                         <div class="font-medium text-gray-900 dark:text-white">
                                                             {{ entry.location }}
@@ -217,7 +232,7 @@
                                                 class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 dark:bg-purple-500 hover:bg-blue-700 dark:hover:bg-purple-600 rounded-lg transition-colors duration-200"
                                             >
                                                 <ArrowTopRightOnSquareIcon class="w-5 h-5 mr-1.5" />
-                                                Details
+                                                Detalizēti
                                             </a>
                                         </div>
                                     </div>
@@ -246,7 +261,9 @@ import {
     MapPinIcon,
     CurrencyDollarIcon,
     ArrowTopRightOnSquareIcon,
-    XCircleIcon
+    XCircleIcon,
+    SunIcon,
+    MoonIcon
 } from "@heroicons/vue/24/outline";
 import timberlog from "../icons/timber/logs.png";
 
@@ -358,17 +375,17 @@ const filteredEntries = computed(() => {
 // Remove the diameter filter from the regular filters
 const filters = computed(() => {
     return [
-        { key: "seller", label: "Filter by Seller", options: uniqueSellers.value },
-        { key: "type", label: "Filter by Type", options: uniqueType.value },
-        { key: "class", label: "Filter by Class", options: uniqueClass.value },
+        { key: "seller", label: "Pārdevēji", options: uniqueSellers.value },
+        { key: "type", label: "Tipi", options: uniqueType.value },
+        { key: "class", label: "Klases", options: uniqueClass.value },
         {
             key: "length",
-            label: "Filter by Length",
+            label: "Garumi",
             options: uniqueLength.value,
         },
         {
             key: "location",
-            label: "Filter by Location",
+            label: "Atrašanās vietas",
             options: uniqueLocation.value,
         },
     ];
@@ -411,19 +428,31 @@ function updateChart() {
     }
 
     const filteredData = filteredEntries.value;
+    const isDarkMode = document.documentElement.classList.contains('dark');
     
-    // Define a fixed color palette
-    const colorPalette = [
-        '#3b82f6', // blue
-        '#ef4444', // red
-        '#10b981', // green
-        '#f59e0b', // amber
-        '#8b5cf6', // purple
-        '#ec4899', // pink
-        '#14b8a6', // teal
-        '#f97316', // orange
-        '#6366f1', // indigo
-        '#84cc16'  // lime
+    // Define a fixed color palette with better visibility in both themes
+    const colorPalette = isDarkMode ? [
+        '#60a5fa', // bright blue
+        '#f87171', // bright red
+        '#34d399', // bright green
+        '#fbbf24', // bright amber
+        '#a78bfa', // bright purple
+        '#f472b6', // bright pink
+        '#2dd4bf', // bright teal
+        '#fb923c', // bright orange
+        '#818cf8', // bright indigo
+        '#a3e635'  // bright lime
+    ] : [
+        '#2563eb', // dark blue
+        '#dc2626', // dark red
+        '#059669', // dark green
+        '#d97706', // dark amber
+        '#7c3aed', // dark purple
+        '#db2777', // dark pink
+        '#0d9488', // dark teal
+        '#ea580c', // dark orange
+        '#4f46e5', // dark indigo
+        '#65a30d'  // dark lime
     ];
 
     // Create seller color mapping
@@ -432,76 +461,109 @@ function updateChart() {
         sellerColors[seller] = colorPalette[index % colorPalette.length];
     });
 
+    const textColor = isDarkMode ? '#e5e7eb' : '#374151';
+    const axisLineColor = isDarkMode ? '#4b5563' : '#d1d5db';
+    const tooltipBackgroundColor = isDarkMode ? 'rgba(17, 24, 39, 0.95)' : 'rgba(255, 255, 255, 0.95)';
+    const tooltipBorderColor = isDarkMode ? '#374151' : '#e5e7eb';
+
     chart.setOption({
+        backgroundColor: 'transparent',
         tooltip: {
             trigger: "axis",
             axisPointer: {
                 type: "shadow",
+                shadowStyle: {
+                    color: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                }
+            },
+            backgroundColor: tooltipBackgroundColor,
+            borderColor: tooltipBorderColor,
+            textStyle: {
+                color: textColor
             },
             formatter: function (params) {
                 const entry = filteredData[params[0].dataIndex];
                 return `
                     <div style="margin-bottom: 10px;">
-                        <strong>${entry.seller}</strong>
+                        <strong style="color: ${textColor}">${entry.seller}</strong>
                     </div>
                     <div style="margin-bottom: 10px; padding-bottom: 10px;">
-                        <div><strong>Price:</strong> €${entry.price}</div>
-                        <div><strong>Class:</strong> ${entry.class || 'N/A'}</div>
-                        <div><strong>Type:</strong> ${entry.type || 'N/A'}</div>
-                        <div><strong>Diameter:</strong> ${entry.diameter || 'N/A'}</div>
-                        <div><strong>Length:</strong> ${entry.length || 'N/A'}</div>
-                        <div><strong>Location:</strong> ${entry.location || 'N/A'}</div>
+                        <div style="color: ${textColor}"><strong>Cena:</strong> €${entry.price}</div>
+                        <div style="color: ${textColor}"><strong>Klase:</strong> ${entry.class || 'N/A'}</div>
+                        <div style="color: ${textColor}"><strong>Tips:</strong> ${entry.type || 'N/A'}</div>
+                        <div style="color: ${textColor}"><strong>Diametrs:</strong> ${entry.diameter || 'N/A'}</div>
+                        <div style="color: ${textColor}"><strong>Garums:</strong> ${entry.length || 'N/A'}</div>
+                        <div style="color: ${textColor}"><strong>Atrašanās vieta:</strong> ${entry.location || 'N/A'}</div>
                     </div>
                 `;
-            },
+            }
         },
         grid: {
             left: '3%',
             right: '4%',
-            bottom: '5%', // Reduced bottom margin since we don't have x-axis labels
+            bottom: '5%',
             containLabel: true
         },
         xAxis: {
             type: "category",
-            data: filteredData.map((_, index) => index + 1), // Just numbers instead of seller names
+            data: filteredData.map((_, index) => index + 1),
             axisLabel: {
-                show: false // Hide x-axis labels completely
+                show: false
             },
             axisTick: {
-                show: false // Hide axis ticks
+                show: false
+            },
+            axisLine: {
+                lineStyle: {
+                    color: axisLineColor
+                }
             }
         },
         yAxis: {
             type: "value",
-            name: 'Price (€)',
+            name: 'Cena (€)',
+            nameTextStyle: {
+                color: textColor
+            },
             axisLabel: {
-                color: getCurrentTextColor(),
+                color: textColor,
                 formatter: '{value} €'
+            },
+            splitLine: {
+                lineStyle: {
+                    color: isDarkMode ? 'rgba(75, 85, 99, 0.3)' : 'rgba(209, 213, 219, 0.5)'
+                }
+            },
+            axisLine: {
+                lineStyle: {
+                    color: axisLineColor
+                }
             }
         },
         series: [
             {
-                name: "Price",
+                name: "Cena",
                 type: "bar",
                 barWidth: '40%',
                 data: filteredData.map(entry => ({
                     value: entry.price,
                     itemStyle: { 
-                        color: sellerColors[entry.seller]
+                        color: sellerColors[entry.seller],
+                        borderRadius: [4, 4, 0, 0]
                     }
                 })),
                 emphasis: {
                     itemStyle: {
                         shadowBlur: 10,
                         shadowOffsetX: 0,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        shadowColor: isDarkMode ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)'
                     }
                 }
             }
         ]
     });
 
-    // Create custom legend
+    // Create custom legend with theme-aware styles
     Object.entries(sellerColors).forEach(([seller, color]) => {
         const legendItem = document.createElement("div");
         legendItem.style.display = "flex";
@@ -522,7 +584,7 @@ function updateChart() {
 
         const sellerName = document.createElement("span");
         sellerName.textContent = seller;
-        sellerName.style.color = getCurrentTextColor();
+        sellerName.style.color = textColor;
         sellerName.style.fontSize = "14px";
 
         legendItem.appendChild(colorBox);
@@ -530,7 +592,7 @@ function updateChart() {
 
         // Hover effect
         legendItem.addEventListener('mouseenter', () => {
-            legendItem.style.backgroundColor = 'rgba(0, 0, 0, 0.05)';
+            legendItem.style.backgroundColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
         });
         legendItem.addEventListener('mouseleave', () => {
             legendItem.style.backgroundColor = 'transparent';
@@ -540,23 +602,39 @@ function updateChart() {
     });
 }
 
-// Handle window resize
-window.addEventListener('resize', () => {
-    if (chart) {
-        chart.resize();
-    }
+// Watch for theme changes
+const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class' && chart) {
+            updateChart();
+        }
+    });
 });
 
-function getCurrentTextColor() {
-    const body = document.body;
-    if (body.classList.contains("dark")) {
-        return "white";
-    } else {
-        return "black";
+const isDark = ref(document.documentElement.classList.contains('dark'));
+
+const toggleTheme = () => {
+    isDark.value = !isDark.value;
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', isDark.value ? 'dark' : 'light');
+};
+
+// Initialize theme from localStorage on mount
+onMounted(() => {
+    const theme = localStorage.getItem('theme');
+    if (theme) {
+        isDark.value = theme === 'dark';
+        document.documentElement.classList.toggle('dark', isDark.value);
     }
-}
+    observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class']
+    });
+    updateChart();
+});
 
 onUnmounted(() => {
+    observer.disconnect();
     if (chart) {
         chart.dispose();
     }

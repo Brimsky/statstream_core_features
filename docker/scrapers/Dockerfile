@@ -26,5 +26,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY Scraping/ .
 COPY .env .
 
-# Set the entrypoint
-CMD ["python", "run_scrapers.py", "run"]
+# Set the entrypoint to use scheduler mode
+CMD ["python", "run_scrapers.py", "scheduler"]

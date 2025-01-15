@@ -1,83 +1,89 @@
 <template>
-    <div class="min-h-screen py-8 px-4 sm:px-6 lg:px-8 bg-gray-50">
+    <div class="min-h-screen py-8 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-gray-900">
         <!-- Main Content -->
         <div class="max-w-7xl mx-auto">
             <!-- Flex container for chart and filters -->
             <div class="flex flex-col lg:flex-row gap-6">
                 <!-- Chart Container -->
                 <div class="flex-grow">
-                    <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-                        <div class="p-4 border-b border-gray-100">
-                            <h2 class="text-lg font-semibold text-gray-900">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+                        <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+                            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
                                 Price Comparison
                             </h2>
                         </div>
                         <div ref="chartContainer" class="h-96 w-full p-4"></div>
-                        <div ref="legendContainer" class="flex flex-wrap justify-center gap-4 p-4 border-t border-gray-100"></div>
+                        <div ref="legendContainer" class="flex flex-wrap justify-center gap-4 p-4 border-t border-gray-200 dark:border-gray-700"></div>
                     </div>
                 </div>
 
                 <!-- Filters Panel -->
                 <div class="lg:w-80">
-                    <div class="bg-white rounded-xl shadow-lg border border-gray-100">
-                        <div class="p-4 border-b border-gray-100">
-                            <h2 class="text-lg font-semibold text-gray-900">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+                        <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+                            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
                                 Filters
                             </h2>
                         </div>
                         <div class="p-4 space-y-4">
                             <FilterSelect
-                                v-for="(filter, index) in filters"
-                                :key="index"
-                                v-model="filterValues[filter.key]"
+                                v-for="filter in filters"
+                                :key="filter.key"
                                 :label="filter.label"
                                 :options="filter.options"
-                                class="w-full"
+                                v-model="filterValues[filter.key]"
+                                class="text-gray-700 dark:text-gray-300"
                             />
+                            <button 
+                                @click="clearFilters"
+                                class="w-full px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                            >
+                                Clear Filters
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="mt-8">
-                <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-                    <div class="p-4 border-b border-gray-100">
-                        <h2 class="text-lg font-semibold text-gray-900">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+                        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
                             Detailed Listings
                         </h2>
                     </div>
-                    <div class="divide-y divide-gray-100">
+                    <div class="divide-y divide-gray-100 dark:divide-gray-700">
                         <div
                             v-for="entry in filteredEntries"
                             :key="entry.id"
-                            class="p-6 hover:bg-gray-50 transition-colors duration-200"
+                            class="p-6 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors duration-200"
                         >
                             <div class="flex flex-col md:flex-row gap-6">
                                 <div class="flex-grow">
                                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                         <div class="space-y-2">
-                                            <div class="text-sm text-gray-500">Species</div>
-                                            <div class="font-medium">{{ entry.speacies }}</div>
+                                            <div class="text-sm text-gray-500 dark:text-gray-400">Species</div>
+                                            <div class="font-medium text-gray-900 dark:text-white">{{ entry.species }}</div>
                                         </div>
                                         <div class="space-y-2">
-                                            <div class="text-sm text-gray-500">Class</div>
-                                            <div class="font-medium">{{ entry.class }}</div>
+                                            <div class="text-sm text-gray-500 dark:text-gray-400">Class</div>
+                                            <div class="font-medium text-gray-900 dark:text-white">{{ entry.class }}</div>
                                         </div>
                                         <div class="space-y-2">
-                                            <div class="text-sm text-gray-500">Type</div>
-                                            <div class="font-medium">{{ entry.type }}</div>
+                                            <div class="text-sm text-gray-500 dark:text-gray-400">Type</div>
+                                            <div class="font-medium text-gray-900 dark:text-white">{{ entry.type }}</div>
                                         </div>
                                         <div class="space-y-2">
-                                            <div class="text-sm text-gray-500">Dimensions</div>
-                                            <div class="font-medium">{{ entry.diameter }}mm × {{ entry.length }}m</div>
+                                            <div class="text-sm text-gray-500 dark:text-gray-400">Dimensions</div>
+                                            <div class="font-medium text-gray-900 dark:text-white">{{ entry.diameter }}mm × {{ entry.length }}m</div>
                                         </div>
                                         <div class="space-y-2">
-                                            <div class="text-sm text-gray-500">Location</div>
-                                            <div class="font-medium">{{ entry.location }}</div>
+                                            <div class="text-sm text-gray-500 dark:text-gray-400">Location</div>
+                                            <div class="font-medium text-gray-900 dark:text-white">{{ entry.location }}</div>
                                         </div>
                                         <div class="space-y-2">
-                                            <div class="text-sm text-gray-500">Price</div>
-                                            <div class="font-medium">€{{ entry.price }}</div>
+                                            <div class="text-sm text-gray-500 dark:text-gray-400">Price</div>
+                                            <div class="font-medium text-gray-900 dark:text-white">€{{ entry.price }}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -213,6 +219,14 @@ const filters = computed(() => [
     { key: "type", label: "Filter by Type", options: uniqueType.value },
     { key: "class", label: "Filter by Class", options: uniqueClass.value },
 ]);
+
+const clearFilters = () => {
+    filterValues.value = {
+        seller: "",
+        type: "",
+        class: "",
+    };
+};
 
 // Watch for changes and update chart
 watchEffect(() => {

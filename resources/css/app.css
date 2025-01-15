@@ -5,88 +5,152 @@
 @layer base {
     :root {
         --theme-transition-duration: 200ms;
+        /* Light theme colors */
         --bg-primary: #ffffff;
-        --text-primary: #000000;
+        --bg-secondary: #f8fafc;
+        --bg-tertiary: #f1f5f9;
+        --text-primary: #0f172a;
+        --text-secondary: #334155;
+        --text-tertiary: #64748b;
+        --border-color: #e2e8f0;
+        --hover-bg: #f1f5f9;
+        --accent-primary: #3b82f6;
+        --accent-secondary: #0ea5e9;
+        --success: #22c55e;
+        --error: #ef4444;
+        --warning: #f59e0b;
     }
 
     :root.dark {
-        --bg-primary: #1f1f1f;
-        --text-primary: #ffffff;
+        /* Dark theme colors */
+        --bg-primary: #0f172a;
+        --bg-secondary: #1e293b;
+        --bg-tertiary: #334155;
+        --text-primary: #f8fafc;
+        --text-secondary: #e2e8f0;
+        --text-tertiary: #cbd5e1;
+        --border-color: #334155;
+        --hover-bg: #1e293b;
+        --accent-primary: #60a5fa;
+        --accent-secondary: #38bdf8;
+        --success: #4ade80;
+        --error: #f87171;
+        --warning: #fbbf24;
     }
 
-    /* Apply transitions to specific properties */
+    /* Apply transitions */
     *, *::before, *::after {
         @apply transition-colors duration-200 ease-in-out;
     }
 
-    /* Font settings */
-    h1, h2 {
-        @apply font-inter;
+    /* Base styles */
+    body {
+        @apply bg-[var(--bg-primary)] text-[var(--text-primary)];
+    }
+
+    /* Typography */
+    h1 {
+        @apply text-[var(--text-primary)] text-2xl font-bold md:text-3xl;
+    }
+
+    h2 {
+        @apply text-[var(--text-primary)] text-xl font-semibold md:text-2xl;
+    }
+
+    h3 {
+        @apply text-[var(--text-primary)] text-lg font-semibold md:text-xl;
+    }
+
+    p {
+        @apply text-[var(--text-secondary)];
+    }
+
+    /* Links */
+    a {
+        @apply text-[var(--accent-primary)] hover:text-[var(--accent-secondary)];
+    }
+
+    /* Cards */
+    .card {
+        @apply bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl shadow-sm;
+    }
+
+    /* Tables */
+    table {
+        @apply w-full bg-[var(--bg-secondary)] border-[var(--border-color)];
+    }
+
+    th {
+        @apply bg-[var(--bg-tertiary)] text-[var(--text-primary)] px-4 py-2 text-left font-semibold;
+    }
+
+    td {
+        @apply text-[var(--text-secondary)] border-t border-[var(--border-color)] px-4 py-2;
+    }
+
+    tr:hover {
+        @apply bg-[var(--hover-bg)];
+    }
+
+    /* Form elements */
+    input, select, textarea {
+        @apply bg-[var(--bg-secondary)] text-[var(--text-primary)] border border-[var(--border-color)]
+               rounded-lg px-3 py-2 focus:ring-2 focus:ring-[var(--accent-primary)] focus:border-transparent
+               placeholder:text-[var(--text-tertiary)];
+    }
+
+    /* Buttons */
+    button {
+        @apply bg-[var(--accent-primary)] text-white font-medium px-4 py-2 rounded-lg
+               hover:bg-[var(--accent-secondary)] disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+
+    button.secondary {
+        @apply bg-[var(--bg-secondary)] text-[var(--text-primary)] border border-[var(--border-color)]
+               hover:bg-[var(--hover-bg)];
+    }
+
+    /* Status indicators */
+    .success {
+        @apply text-[var(--success)];
+    }
+
+    .error {
+        @apply text-[var(--error)];
+    }
+
+    .warning {
+        @apply text-[var(--warning)];
+    }
+
+    /* Navigation */
+    nav {
+        @apply bg-[var(--bg-primary)] border-b border-[var(--border-color)];
+    }
+
+    /* Lists */
+    ul, ol {
+        @apply text-[var(--text-secondary)];
+    }
+
+    /* Code blocks */
+    pre, code {
+        @apply bg-[var(--bg-tertiary)] text-[var(--text-primary)] rounded px-2 py-1;
     }
 
     /* Prevent transition on page load */
     .no-transitions * {
         transition: none !important;
     }
-
-    body {
-        @apply bg-white dark:bg-neutral-900;
-    }
 }
 
-@layer components {
-    /* registration */
-    .form-label {
-        @apply block text-sm font-bold mb-2 text-gray-700 dark:text-gray-200;
-    }
-
-    .form-input {
-        @apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-white dark:bg-neutral-900 dark:text-white leading-tight focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 dark:focus:border-violet-500 dark:focus:ring-violet-500;
-    }
-
-    .form-button {
-        @apply w-full text-white bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded focus:outline-none focus:ring  dark:bg-violet-600 dark:hover:bg-violet-800;
-    }
-
-    /* Navigation link styles */
-    .nav-link {
-        @apply text-black dark:text-white hover:bg-neutral-100 dark:hover:bg-neutral-700 px-4 py-2 rounded-lg transition-colors duration-200;
-    }
-
-    /* Navbar button styles */
-    .navbar-btn {
-        @apply text-black dark:text-white hover:bg-neutral-100 dark:hover:bg-neutral-700 px-4 py-2 rounded-lg transition-colors duration-200;
-    }
-
-    /* Card styles */
-    .timber-card {
-        @apply relative h-full bg-white dark:bg-neutral-800 rounded-xl shadow-lg dark:shadow-2xl overflow-hidden border border-gray-100 dark:border-neutral-700 p-6 transition-all duration-300;
-    }
-
-    .timber-card:hover {
-        @apply shadow-2xl -translate-y-1;
-    }
-
-    /* Background pattern */
-    .bg-pattern {
-        background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z' fill='currentColor' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
-        @apply absolute inset-0 opacity-[0.03] dark:opacity-[0.05];
-    }
-}
-
+/* Custom utilities */
 @layer utilities {
-    /* Grid spacing utilities */
-    .grid-spacing {
-        @apply gap-6 md:gap-8 lg:gap-8;
-    }
-
-    /* Shadow utilities */
-    .shadow-custom {
-        @apply shadow-lg dark:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.2),0_4px_6px_-2px_rgba(0,0,0,0.1)];
-    }
-
-    /* Text gradient utilities */
     .text-gradient {
         @apply bg-clip-text text-transparent;
+    }
+
+    .text-gradient-primary {
+        @apply bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)] bg-clip-text text-transparent;
     }
 }

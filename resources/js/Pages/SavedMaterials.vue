@@ -1,119 +1,93 @@
 <template>
     <AuthenticatedLayout>
-        <div class="container mx-auto px-4 py-10 dark:bg-neutral-800 bg-white">
-            <div class="p-6 rounded-xl dark:bg-neutral-800 bg-white shadow-md">
-                <h4
-                    class="text-xl font-semibold dark:text-white text-black mb-4"
-                    :class="gradientTextClass"
-                >
-                    Saved Materials
-                </h4>
-                <div class="mb-4">
-                    <label for="sort" class="dark:text-white text-black"
-                        >Sort by:</label
-                    >
-                    <select
-                        id="sort"
-                        v-model="sortCriterion"
-                        @change="sortMaterials"
-                        class="ml-2 p-1 rounded"
-                    >
-                        <option value="price">Price</option>
-                        <option value="species">Species</option>
-                        <option value="date">Date</option>
-                    </select>
-                </div>
+        <div class="min-h-screen py-8 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-gray-900">
+            <div class="max-w-7xl mx-auto">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+                    <div class="p-6">
+                        <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+                            Saved Materials
+                        </h1>
 
-                <div v-if="sortedMaterials.length">
-                    <div class="space-y-4">
-                        <div
-                            v-for="material in sortedMaterials"
-                            :key="material.id"
-                            class="p-4 bg-white dark:bg-neutral-800 shadow-md hover:shadow-lg rounded-md relative"
-                        >
-                            <button
-                                @click="deleteMaterial(material.id)"
-                                class="absolute top-2 right-2 text-red-500"
+                        <!-- Sort Controls -->
+                        <div class="mb-6">
+                            <label for="sort" class="text-sm font-medium text-gray-700 dark:text-gray-300">Sort by:</label>
+                            <select
+                                id="sort"
+                                v-model="sortCriterion"
+                                @change="sortMaterials"
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                             >
-                                Delete
-                            </button>
-                            <div class="flex items-center space-x-4 mb-4">
-                                <div
-                                    class="w-20 h-20 flex items-center justify-center rounded-md"
-                                >
-                                    <img
-                                        class="w-full h-full object-contain"
-                                        :src="logicon"
-                                    />
-                                </div>
-                                <div>
-                                    <h5
-                                        class="text-sm font-semibold text-black dark:text-white"
-                                    >
-                                        {{ material.timber_species.speacies }}
-                                    </h5>
-                                    <h5
-                                        class="text-sm font-semibold text-black dark:text-white"
-                                    >
-                                        {{ material.timber_species.seller }}
-                                    </h5>
-                                    <span
-                                        class="text-xs font-medium text-black dark:text-white"
-                                        >Class:
-                                        {{
-                                            material.timber_species.class
-                                        }}</span
-                                    >
-                                </div>
-                            </div>
+                                <option value="price">Price</option>
+                                <option value="species">Species</option>
+                                <option value="date">Date</option>
+                            </select>
+                        </div>
+
+                        <!-- Materials List -->
+                        <div v-if="sortedMaterials.length" class="space-y-6">
                             <div
-                                class="grid grid-cols-2 gap-4 text-black dark:text-white"
+                                v-for="material in sortedMaterials"
+                                :key="material.id"
+                                class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-6 transition-all hover:shadow-md"
                             >
-                                <div>
-                                    <p>
-                                        <strong>Location:</strong>
-                                        {{ material.timber_species.location }}
-                                    </p>
-                                    <p>
-                                        <strong>Length:</strong>
-                                        {{ material.timber_species.length }} m
-                                    </p>
-                                </div>
-                                <div>
-                                    <p>
-                                        <strong>Diameter:</strong>
-                                        {{
-                                            material.timber_species.diameter
-                                        }}
-                                        cm
-                                    </p>
-                                    <p>
-                                        <strong>Date Recorded:</strong>
-                                        {{ material.timber_species.date }}
-                                    </p>
-                                    <p>
-                                        <strong>Current Price:</strong>
-                                        {{ material.timber_species.price }} $
-                                    </p>
-                                    <p>
-                                        <strong>Initial Price:</strong>
-                                        {{ material.initial_price }} $
-                                    </p>
-                                    <p>
-                                        <strong>Price Change:</strong>
-                                        {{ material.price_change }} $ ({{
-                                            material.price_change_percentage.toFixed(
-                                                2,
-                                            )
-                                        }}%)
-                                    </p>
+                                <div class="flex flex-col md:flex-row justify-between gap-4">
+                                    <!-- Material Info -->
+                                    <div class="space-y-4">
+                                        <div>
+                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                                {{ material.timber_species.speacies }}
+                                            </h3>
+                                            <p class="text-sm text-gray-500 dark:text-gray-400">
+                                                Added on {{ formatDate(material.timber_species.date) }}
+                                            </p>
+                                        </div>
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                            <div class="space-y-1">
+                                                <p class="text-sm text-gray-500 dark:text-gray-400">Type</p>
+                                                <p class="font-medium text-gray-900 dark:text-white">{{ material.timber_species.seller }}</p>
+                                            </div>
+                                            <div class="space-y-1">
+                                                <p class="text-sm text-gray-500 dark:text-gray-400">Class</p>
+                                                <p class="font-medium text-gray-900 dark:text-white">{{ material.timber_species.class }}</p>
+                                            </div>
+                                            <div class="space-y-1">
+                                                <p class="text-sm text-gray-500 dark:text-gray-400">Dimensions</p>
+                                                <p class="font-medium text-gray-900 dark:text-white">
+                                                    {{ material.timber_species.diameter }}mm × {{ material.timber_species.length }}m
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Price and Actions -->
+                                    <div class="flex flex-col justify-between items-end">
+                                        <div class="text-right">
+                                            <p class="text-sm text-gray-500 dark:text-gray-400">Price</p>
+                                            <p class="text-2xl font-bold text-gray-900 dark:text-white">
+                                                ${{ material.timber_species.price }}
+                                            </p>
+                                        </div>
+                                        <button
+                                            @click="deleteMaterial(material.id)"
+                                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors"
+                                        >
+                                            Remove
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Empty State -->
+                        <div
+                            v-else
+                            class="text-center py-12 px-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg"
+                        >
+                            <p class="text-gray-500 dark:text-gray-400">
+                                No saved materials yet. Start by saving some materials from the price comparison page.
+                            </p>
+                        </div>
                     </div>
-                </div>
-                <div v-else>
-                    <p class="text-white">No materials saved yet.</p>
                 </div>
             </div>
         </div>
@@ -183,4 +157,9 @@ const deleteMaterial = (id) => {
 };
 
 // watch(sortCriterion, sortMaterials);
+
+const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString();
+};
 </script>
