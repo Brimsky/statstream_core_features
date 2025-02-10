@@ -24,7 +24,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
 COPY Scraping/ .
-COPY .env .
+
+# Set default environment variables
+ENV DB_CONNECTION=mysql
+ENV DB_HOST=mysql
+ENV DB_PORT=3306
+ENV DB_DATABASE=laravel
+ENV DB_USERNAME=root
 
 # Set the entrypoint to use scheduler mode
 CMD ["python", "run_scrapers.py", "scheduler"]
