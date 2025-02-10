@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: scraper
-        image: gcr.io/PROJECT_ID/scraper:VERSION  # Replace PROJECT_ID and VERSION
+        image: europe-north1-docker.pkg.dev/innate-might-447809-r8/statstream-repo/scraper:latest
         command: ["python", "run_scrapers.py", "scheduler"]  # Use scheduler mode
         env:
         - name: DB_CONNECTION

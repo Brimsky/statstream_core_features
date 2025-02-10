@@ -4,7 +4,7 @@ steps:
   args: 
     - 'build'
     - '-t'
-    - 'gcr.io/$PROJECT_ID/statstream:latest'
+    - 'europe-north1-docker.pkg.dev/$PROJECT_ID/statstream-repo/statstream:latest'
     - '.'
 
 # Build the scraper image
@@ -12,12 +12,12 @@ steps:
   args:
     - 'build'
     - '-t'
-    - 'gcr.io/$PROJECT_ID/scraper:latest'
+    - 'europe-north1-docker.pkg.dev/$PROJECT_ID/statstream-repo/scraper:latest'
     - '-f'
     - 'docker/scrapers/Dockerfile'
     - '.'
 
 # Push the images
 images:
-- 'gcr.io/$PROJECT_ID/statstream:latest'
-- 'gcr.io/$PROJECT_ID/scraper:latest'
+- 'europe-north1-docker.pkg.dev/$PROJECT_ID/statstream-repo/statstream:latest'
+- 'europe-north1-docker.pkg.dev/$PROJECT_ID/statstream-repo/scraper:latest'
