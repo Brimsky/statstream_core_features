@@ -9,9 +9,9 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     unzip \
-    nodejs \
-    npm \
-    nginx
+    && curl -sL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs \
+    && apt-get install -y nginx
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -34,25 +34,27 @@ RUN composer install --no-interaction --no-dev --optimize-autoloader
 # Copy the rest of the application
 COPY . .
 
-# Create .env file for production
-RUN cp .env.example .env && \
-    php artisan key:generate
-
-# Install and build frontend assets
+# Install npm and build assets
 RUN npm install && npm run build
 
 # Configure Nginx
 COPY docker/nginx.conf /etc/nginx/sites-available/default
 
 # Set permissions
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+RUN chown -R www-data:www-data storage bootstrap/cache
+
+# Create .env file from example
+RUN cp .env.example .env \
+    && php artisan key:generate
 
 # Set default environment variables
-ENV DB_CONNECTION=mysql
-ENV DB_HOST=mysql
-ENV DB_PORT=3306
-ENV DB_DATABASE=laravel
-ENV DB_USERNAME=root
+ENV DB_CONNECTION=mysql \
+    DB_HOST=mysql \
+    DB_PORT=3306 \
+    DB_DATABASE=laravel \
+    DB_USERNAME=root \
+    APP_ENV=production \
+    APP_DEBUG=false
 
 # Expose port 80
 EXPOSE 80
