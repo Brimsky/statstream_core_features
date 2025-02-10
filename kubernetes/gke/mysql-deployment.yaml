@@ -17,18 +17,6 @@ spec:
   resources:
     requests:
       storage: 10Gi
-  storageClassName: standard
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: mysql
-spec:
-  ports:
-  - port: 3306
-  selector:
-    app: mysql
-  clusterIP: None
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -46,8 +34,8 @@ spec:
         app: mysql
     spec:
       containers:
-      - image: mysql:8.0
-        name: mysql
+      - name: mysql
+        image: mysql:8.0
         env:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
@@ -73,3 +61,14 @@ spec:
       - name: mysql-persistent-storage
         persistentVolumeClaim:
           claimName: mysql-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: mysql
+  clusterIP: None
