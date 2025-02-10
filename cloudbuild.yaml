@@ -1,4 +1,11 @@
 steps:
+# Configure Docker authentication
+- name: 'gcr.io/cloud-builders/gcloud'
+  args:
+    - 'auth'
+    - 'configure-docker'
+    - 'europe-north1-docker.pkg.dev'
+
 # Build the main application image
 - name: 'gcr.io/cloud-builders/docker'
   args: 
