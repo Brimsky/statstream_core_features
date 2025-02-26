@@ -33,6 +33,13 @@ def process_lengths(length):
     lengths = length.rstrip('m').split('/')
     return [f"{float(l.strip()):.2f}" for l in lengths]
 
+def extract_price(price_str):
+    # Extract the first number from a price string like "200 (190)"
+    price_match = re.search(r'(\d+(?:\.\d+)?)', price_str)
+    if price_match:
+        return float(price_match.group(1))
+    return 0.0
+
 def extract_data(html_content):
     soup = BeautifulSoup(html_content, 'html.parser')
     data = []
@@ -65,7 +72,8 @@ def extract_data(html_content):
                 continue
 
             if "Brāķēts" in header.text:
-                price = cells[1].text.strip()
+                price_str = cells[1].text.strip()
+                price = extract_price(price_str)
                 base_data = {
                     'Species': 'Bērzs',
                     'Type': 'Finierkluči',
@@ -75,13 +83,14 @@ def extract_data(html_content):
                     'Seller': 'Finieris',
                     'Location': 'Bolderāja',
                     'Date': date,
-                    'Price': f"{float(price):.2f}",
+                    'Price': f"{price:.2f}",
                     'URL': 'https://www.finieris.com/lv/meza-ipasniekiem/finierklucu-iepirksana/'
                 }
                 data.append(base_data)
             else:
                 diameter = format_diameter(cells[0].text.strip())
-                price = cells[1].text.strip()
+                price_str = cells[1].text.strip()
+                price = extract_price(price_str)
 
                 base_data = {
                     'Species': 'Bērzs',
@@ -91,7 +100,7 @@ def extract_data(html_content):
                     'Seller': 'Finieris',
                     'Location': 'Rīga',
                     'Date': date,
-                    'Price': f"{float(price):.2f}",
+                    'Price': f"{price:.2f}",
                     'URL': 'https://www.finieris.com/lv/meza-ipasniekiem/finierklucu-iepirksana/'
                 }
 
